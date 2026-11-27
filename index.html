@@ -361,22 +361,36 @@ git -C ~/Projects/sessia config --unset sessia.root</code></pre></dd>
 <section class="part" id="faq">
   <p class="label">FAQ</p>
   <h2>Questions people ask</h2>
-  <dl class="honest faq">
-    <dt>Do I have to move my projects into Sessia's folder?</dt>
-    <dd>No. <code>./setup.sh root-dir=~/code</code> makes your own folder the projects folder: it links Sessia's rules and hooks into it, and stops if the folder already has a <code>CLAUDE.md</code> of its own. Its folders then make the page's menu, and the page can change the folder later.</dd>
-    <dt>Does it change Claude Code, or my own <code>CLAUDE.md</code> files?</dt>
-    <dd>Claude Code itself and your repos' own <code>CLAUDE.md</code> files stay as they are. Sessia's rules are a <code>CLAUDE.md</code> in the projects folder, which Claude Code reads above each project's own. The main changes <code>setup.sh</code> makes, to Claude Code's settings among them, are listed under Install, with how to undo them.</dd>
-    <dt>Does it cost tokens?</dt>
-    <dd>Sessia itself costs nothing. Its rules are about 37 KB of text that each session re-reads on every turn, and a cheap model, Haiku, checks some answers, so they add some tokens. They also ask for short conversations and cheaper models for easy work, and on one person's use a model call then cost about 40% less (<a href="#cost">Cost</a>).</dd>
-    <dt>Can I use it with colleagues?</dt>
-    <dd>Today each person runs Sessia on their own machine, for their own sessions, and there is no shared view. The facts and rules live in the repos, so a colleague's sessions know what yours know. Using it together is something we are thinking about.</dd>
-    <dt>Does it run on Windows?</dt>
-    <dd>The page does, started by hand with <code>start-sessia.cmd</code>, but <code>setup.sh</code>, the hooks and the start at login are macOS only.<span data-released> If you use it on Windows, open pull requests: help in that direction is welcome, and we will extend it quickly.</span> Some of that work is planned on a Windows machine of our own.</dd>
-    <dt>Can I try it without changing my setup?</dt>
-    <dd>Yes. The live copy at the top is the page with made-up sessions.<span data-released> In a clone, <code>python3 demo.py . 7399</code> runs it on made-up sessions at <code>localhost:7399</code>, and <code>python3 dashboard.py</code> starts it on your own sessions, with no setup.</span></dd>
-    <dt>Can I change the rules?</dt>
-    <dd>Yes. <code>/add-rule</code> turns a sentence into a rule and puts it live, or you edit them yourself: they are plain Markdown in Sessia's folder.<span data-released> Fork it if your way differs.</span></dd>
-  </dl>
+  <div class="faq">
+    <details>
+      <summary><span>Do I have to move my projects into Sessia's folder?</span></summary>
+      <p>No. <code>./setup.sh root-dir=~/code</code> makes your own folder the projects folder: it links Sessia's rules and hooks into it, and stops if the folder already has a <code>CLAUDE.md</code> of its own. Its folders then make the page's menu, and the page can change the folder later.</p>
+    </details>
+    <details>
+      <summary><span>Does it change Claude Code, or my own <code>CLAUDE.md</code> files?</span></summary>
+      <p>Claude Code itself and your repos' own <code>CLAUDE.md</code> files stay as they are. Sessia's rules are a <code>CLAUDE.md</code> in the projects folder, which Claude Code reads above each project's own. The main changes <code>setup.sh</code> makes, to Claude Code's settings among them, are listed under Install, with how to undo them.</p>
+    </details>
+    <details>
+      <summary><span>Does it cost tokens?</span></summary>
+      <p>Sessia itself costs nothing. Its rules are about 37 KB of text that each session re-reads on every turn, and a cheap model, Haiku, checks some answers, so they add some tokens. They also ask for short conversations and cheaper models for easy work, and on one person's use a model call then cost about 40% less (<a href="#cost">Cost</a>).</p>
+    </details>
+    <details>
+      <summary><span>Can I use it with colleagues?</span></summary>
+      <p>Today each person runs Sessia on their own machine, for their own sessions, and there is no shared view. The facts and rules live in the repos, so a colleague's sessions know what yours know. Using it together is something we are thinking about.</p>
+    </details>
+    <details>
+      <summary><span>Does it run on Windows?</span></summary>
+      <p>The page does, started by hand with <code>start-sessia.cmd</code>, but <code>setup.sh</code>, the hooks and the start at login are macOS only.<span data-released> If you use it on Windows, open pull requests: help in that direction is welcome, and we will extend it quickly.</span> Some of that work is planned on a Windows machine of our own.</p>
+    </details>
+    <details>
+      <summary><span>Can I try it without changing my setup?</span></summary>
+      <p>Yes. The live copy at the top is the page with made-up sessions.<span data-released> In a clone, <code>python3 demo.py . 7399</code> runs it on made-up sessions at <code>localhost:7399</code>, and <code>python3 dashboard.py</code> starts it on your own sessions, with no setup.</span></p>
+    </details>
+    <details>
+      <summary><span>Can I change the rules?</span></summary>
+      <p>Yes. <code>/add-rule</code> turns a sentence into a rule and puts it live, or you edit them yourself: they are plain Markdown in Sessia's folder.<span data-released> Fork it if your way differs.</span></p>
+    </details>
+  </div>
 </section>
 
 </main>
