@@ -1,0 +1,7 @@
+/* A branch's row: its name and tags on one line, its last commit under them. The card itself is the page's .session,
+   and the tags are the page's .tag, which other tabs use too. */
+li.branch { display: block; padding: 4px 0; }
+li.branch + li.branch { border-top: 1px solid var(--line); }
+li.branch .note { margin-top: 0; }
+.compact li.branch { padding: 1px 0; }
+.compact li.branch .note { display: none; }

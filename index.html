@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sessia: context switching without the fatigue</title>
+<meta name="description" content="Sessia is a dashboard for Claude Code with a worked-out way for every step of the development cycle, from knowing which session needs you to the reviewed merge request and the word &quot;ship&quot;, so a lot of it becomes frictionless and your attention stays on the decisions.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+<!-- The theme the visitor picked, before the first paint. The same key and format as Sessia's own page
+     (a JSON string in localStorage "theme"), so the live copy below opens in the same theme. -->
+<script>
+  try { var t = JSON.parse(localStorage.getItem('theme')); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}
+</script>
+<script src="site.js" defer></script>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="#top" aria-label="Sessia, to the top">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="var(--text)"/>
+      <path d="M9 10.5l6 5.5-6 5.5" fill="none" stroke="var(--bg)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="17" y="19.5" width="7.5" height="3" rx="1.5" fill="#2fbf71"/>
+    </svg>
+    Sessia
+  </a>
+  <nav>
+    <a href="#how">How it works</a>
+    <a href="#install">Install</a>
+    <a data-github data-released>GitHub</a>
+    <button type="button" class="theme" id="theme" aria-label="Switch to the light theme">
+      <svg class="sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 1.8v1.9M10 16.3v1.9M1.8 10h1.9M16.3 10h1.9M4.2 4.2l1.35 1.35M14.45 14.45l1.35 1.35M4.2 15.8l1.35-1.35M14.45 5.55l1.35-1.35"/></svg>
+      <svg class="moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M16.6 12.2A7 7 0 0 1 7.8 3.4a7 7 0 1 0 8.8 8.8z"/></svg>
+    </button>
+  </nav>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <h1>Context switching without the fatigue.</h1>
+  <div class="under">
+    <p class="lede">Switching is not what wears you out. Hunting for the right window is, and re-reading a wall of text, and keeping in your head what you left unfinished. Sessia takes those off you: one page shows which Claude Code session needs you, answers come back in the same structure, and what you would have to remember is written down.</p>
+    <div class="act buttons">
+      <button type="button" class="pill" data-released data-copy-clone aria-label="Copy the install command"><span aria-hidden="true">$</span> <code data-clone></code></button>
+      <a class="more" data-github data-released>View on GitHub →</a>
+      <span class="more" data-unreleased>Not public yet.</span>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="notes">
+      <p class="note" id="note-answers">Answers come back in the same structure: done or not, what waits for you, and each decision as a question you answer in one line, like “1 A, 2 C”. In daily use it has been extremely stable, so you pick up any session in seconds.</p>
+      <p class="note" id="note-lost">See what could still get lost: sessions that stopped mid-work, and changes not yet committed, pushed or merged.</p>
+    </div>
+    <div class="window">
+      <div class="window-bar">localhost:7357</div>
+      <div class="viewport"><iframe id="live" src="live/" title="A live copy of Sessia's page, with made-up data: switch tabs and open menus"></iframe></div>
+    </div>
+    <svg class="leaders" id="leaders" aria-hidden="true"></svg>
+  </div>
+  <p class="caption">A live copy of the page, with made-up sessions. Switch tabs, open the menus; the buttons that would act say what they do in your own copy.</p>
+</section>
+
+<section class="opening" id="how">
+  <p>Sessia is a dashboard for Claude Code with a worked-out way for every step of the development cycle, from knowing which session needs you to the reviewed merge request and the word “ship”, so a lot of it becomes frictionless and your attention stays on the decisions.</p>
+  <p class="practical">Start Claude Code the way you always do. Sessia finds every session running on your machine, however you started it. It runs there too, with no account.</p>
+</section>
+
+<section class="part" id="agent-view">
+  <p class="label">Isn't this agent view?</p>
+  <h2>Agent view focuses on the agents. Sessia focuses on the work.</h2>
+  <p>Getting it done, tested and shipped. Side tasks get tracked for you, and the docs grow as you work.</p>
+</section>
+
+<section class="part">
+  <p class="label">1 · See every session</p>
+  <h2>Know which session needs you</h2>
+  <p class="off">You no longer alt-tab through windows to find the session that needs you.</p>
+  <p>Every Claude Code session running on your machine is on one page, grouped by project. Each shows its name and whether it is working, waiting for you or idle, and for how long; often the name and the status are enough. A waiting one says what it waits for: a question it asked, or a permission it needs. Open jumps to its VS Code window and tab. When one needs you, a notification comes with a sound, so you are told when you are needed and react when you want.</p>
+  <p>Run two or three sessions, or as many as your machine can handle. Thinking at that speed is still work, so the pace is yours.</p>
+  <figure class="shot">
+    <div class="window"><div class="viewport"><iframe src="live/?tab=running&amp;menu" title="A live copy of Sessia's page with the project menu open: each project with what waits in it" loading="lazy"></iframe></div></div>
+    <figcaption>The menu picks one project folder, or several side by side. What waits in the others is still counted.</figcaption>
+  </figure>
+</section>
+
+<section class="part">
+  <p class="label">2 · Pick up, and decide</p>
+  <h2>Read where a session stands in seconds</h2>
+  <p class="off">You no longer re-read a wall of text to learn whether a session finished and what it wants from you.</p>
+  <p>You read the last message of each turn, so that message holds everything, in the same order every time: a label that names the tab, one line that says done or not, one line per task with what needs you at the top, and the details split into what you must decide and what is for your information. Ideas and choices come as numbered questions with lettered options, the one recommended and why, so you answer in one line. In daily use the structure has been extremely stable, and a hook sends an answer that breaks it back to the session, today once.</p>
+  <div class="before">
+    <p class="label">Without the structure: the same answer, as it usually comes</p>
+    <p>I looked into the export timeout. At first I thought the server was running out of memory, but after going through the logs it turned out the problem was in our code: the export ran one database query per invoice, so with a few thousand invoices it hit the timeout. I've rewritten it to run a single query for all invoices, and it now takes about 4 seconds. I pushed the branch and opened merge request #41, so you can take a look when you have a moment. One thing I noticed along the way: the old export also included cancelled invoices, probably by accident, but the accountants may rely on it. I'd lean towards leaving them out, since nobody can pay them and it matches what the invoice list shows, but I can keep them in as before if you prefer. Let me know which way you want to go.</p>
+  </div>
+  <p class="label with">With it</p>
+  <div class="answer">
+    <pre><code><span data-part="1">📌 Invoice export fix</span>
+
+<span data-part="2">🔴 Not done: 1 task waits for you, 1 is ready for your check</span>
+
+<span data-part="3">## In short
+- ⏳ You: include cancelled invoices in the export? (A include, B leave out, my pick B)
+- 👀 Ready for your check: merge request #41, the export no longer times out
+- ✅ Found why it timed out: one database query per invoice
+
+The export now runs one query for all invoices and takes 4 seconds instead of timing out.</span>
+
+## In detail
+### Needs your decision
+<span data-part="4">1. **Should the export include cancelled invoices?** The old export did, by accident, and the accountants may rely on it.
+   - A: include them, as before.
+   - B (recommended): leave them out. Nobody can pay them.
+   - My pick is B: it matches what the invoice list shows.</span>
+### For your information
+<span data-part="5">- **Correction: the timeout was in our code, not the server.** I said earlier it was the server's memory; it was one query per invoice. Nothing to do.</span></code></pre>
+    <ol class="parts">
+      <li><b>The 📌 label</b> names the tab and the session's card, so many tabs read as many different jobs.</li>
+      <li><b>The verdict line</b> says at a glance whether the session is finished.</li>
+      <li><b>In short</b> is the whole state in a few lines, what needs you at the top, with at most three lines under it.</li>
+      <li><b>A decision</b> carries its background, lettered options and a pick, so you can answer it without having followed the session: “1 B”.</li>
+      <li><b>A correction</b> is named as one, so nothing you were told earlier stays wrong.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="part">
+  <p class="label">3 · The merge request is ready</p>
+  <h2>Reviewed before you open it</h2>
+  <p class="off">You no longer push, open the merge request, describe it and get it reviewed by hand.</p>
+  <p>When a branch is ready, the session pushes it, opens the merge request on GitHub and has it reviewed in a fresh context, so the code is not graded by the session that wrote it. The review goes on the merge request as a comment. The description has a Summary and a Why, a Decisions part when a choice was made, and screenshots when the change shows in a browser. Read Decisions closely: it is where a session could have gone the wrong way.</p>
+  <ol class="parts glance">
+    <li><b>Pushes the branch</b> when it is ready.</li>
+    <li><b>Opens the merge request</b> on GitHub, with a Summary, a Why, the Decisions and screenshots.</li>
+    <li><b>Has it reviewed</b> in a fresh context, and the review goes on it as a comment.</li>
+    <li><b>Hands it to you</b> to read, Decisions first.</li>
+  </ol>
+  <p class="aside">This is asked of every session in its rules. No hook checks it.</p>
+</section>
+
+<section class="part">
+  <p class="label">4 · You say “ship”</p>
+  <h2>The decision stays yours</h2>
+  <p class="off">You no longer do the merge chores, and the merge waits for your word.</p>
+  <p>Once you have read it, you type “ship”. The session merges, deploys by the repo's own steps, checks that production answers, and cleans up the branch and its folder. Until you type “ship” or “deploy”, a hook refuses the merge and the commands that change a production server. It reads your own latest message, so a pasted prompt or a subagent cannot open it.</p>
+  <p class="aside">The hook is a word list: it catches slips, not everything. The deploy steps are each repo's own.</p>
+</section>
+
+<section class="part">
+  <p class="label">5 · Bugs and to-dos are kept</p>
+  <h2>What a session finds on the way is written down</h2>
+  <p class="off">You no longer stop to write down the bug or the to-do a session ran into.</p>
+  <div class="beside">
+  <ul class="parts glance">
+    <li><b>Bugs into <code>BUGS.md</code>,</b> to-dos into <code>TODO.md</code>, each with a priority.</li>
+    <li><b>Pushed at once,</b> and the session goes back to your task.</li>
+    <li><b>Shown as boards,</b> high priority at the top.</li>
+    <li><b>▶️ Start</b> opens a new session on an item.</li>
+    <li><b>Dated work into <code>SCHEDULED.md</code>,</b> overdue in red, with a notification.</li>
+  </ul>
+  <p>When a session finds a bug or a to-do while it works on your task, it writes it into the repo's <code>BUGS.md</code> or <code>TODO.md</code> with a priority, pushes it, and goes back to your task. The page shows those files as boards, high priority at the top, and ▶️ Start opens a new session on an item with its text ready to send. This is asked of a session, not enforced.</p>
+  <p>Work due on a set date goes into <code>SCHEDULED.md</code>: numbered and dated, overdue in red, with a notification when it comes due. It reminds you; it runs nothing.</p>
+  </div>
+  <figure class="shot">
+    <div class="window"><div class="viewport"><iframe src="live/?tab=todo" title="A live copy of Sessia's TODO tab: each repo's TODO.md as a board, high priority at the top" loading="lazy"></iframe></div></div>
+    <figcaption>The TODO tab: each repo's <code>TODO.md</code> as a board.</figcaption>
+  </figure>
+</section>
+
+<section class="part">
+  <p class="label">6 · The safety net</p>
+  <h2>See what could still get lost</h2>
+  <p class="off">You no longer keep in your head what is unfinished.</p>
+  <p>Sessions that stopped mid-work, after a crash, a force quit or VS Code quitting, stay listed until you dismiss them, and so do sessions that ended with tasks still open. Code not safe yet lists, in every repo, uncommitted changes, commits that exist on this machine alone, branches not merged, and main folders behind GitHub.</p>
+  <p>Worktrees are how it works: each branch gets its own folder, so sessions in the same repo don't step on each other's changes. A worktree is deleted after checks: nothing uncommitted, no commit on this machine alone, and no session running there or stopped mid-work there. A hook refuses a commit on the main branch when a Claude session runs git; your own commit passes.</p>
+  <figure class="shot">
+    <div class="window"><div class="viewport"><iframe src="live/?tab=code" title="A live copy of Sessia's Code not safe yet tab: uncommitted changes and branches not pushed or merged, per repo" loading="lazy"></iframe></div></div>
+    <figcaption>Code not safe yet: what is not committed, pushed or merged, in every repo.</figcaption>
+  </figure>
+</section>
+
+<section class="part">
+  <p class="label">7 · Why you can trust it</p>
+  <h2>It runs on your machine</h2>
+  <p class="off">No account to make, and no server of ours that your sessions pass through.</p>
+  <p>Sessia runs on your machine, at <code>localhost</code>, and reads the files Claude Code and git already keep. What it asks outside: through your own <code>gh</code> login it reads merge requests and commit authors' pictures from GitHub, and for a GitLab repo it sends a commit e-mail to a picture service. It is tested on throwaway repos: checks of the page's logic, a test in a real browser, and a test for each hook.</p>
+  <p>Proof from use, all on one person's Mac: 34 sessions at once, 15 repos, 238 sessions in 21 days.</p>
+  <h3>The plain limits</h3>
+  <ul class="plain">
+    <li>Claude Code, macOS and GitHub today, and VS Code for the Open and Start buttons.</li>
+    <li>It reads the sessions of VS Code and the terminal. Other ways of running Claude Code are untried.</li>
+    <li>It reads Claude Code's own files, which are not a documented interface, so a Claude Code release can break it.</li>
+    <li>Lists can be up to 30 seconds behind.</li>
+  </ul>
+  <h3>What a hook enforces, and what is asked</h3>
+  <dl class="honest">
+    <dt>Enforced by a hook</dt>
+    <dd>No commit on the main branch, and no push to it except the docs a session keeps, when a Claude session runs git (your own commit passes). Merging, and commands that change a production server, after you type “ship” or “deploy” in your own latest message. A merge request is closed with a comment that says why. Claude's own memory stays off. The shape of an answer: the label, the verdict line, the status list, the decision format, a scheduled item with its number and date; a broken answer is sent back once, today.</dd>
+    <dt>Checked by a cheap model</dt>
+    <dd>That an answer stands on its own, and answers each question you asked.</dd>
+    <dt>Asked of a session</dt>
+    <dd>Staying on your task, plain English, cutting nothing you need, a worktree for every branch, opening the merge request and running the review, a cheaper model by default and handing over at 100k and 200k tokens (a hook can advise, not switch), and handing big reads to a subagent.</dd>
+  </dl>
+</section>
+
+<section class="part">
+  <p class="label">8 · How it grows</p>
+  <h2>A rulebook that grows from use</h2>
+  <p class="off">You no longer explain the same thing to every session.</p>
+  <p>Each rule came from something that went wrong or got in the way, and carries its date and its reason. <code>/add-rule</code> turns a sentence into a rule and puts it live. Facts go into the repo, not into one machine's memory, so a colleague's sessions know what yours know, and the facts can be reviewed like code.</p>
+  <p>A session that ended on a finished report leaves the list by itself, so what is listed is still open, and an empty page means you are done.</p>
+  <p>And a small extra, on cost: a session re-reads its whole conversation on every turn, so a long conversation costs more on every turn. The rules ask for short conversations and cheaper models for easy work, and the page shows each conversation's size in grey, amber or red.</p>
+  <blockquote class="personal">
+    <p>I built Sessia for myself. It is not perfect, and I am still finding my way, but it does wonders for me. Take it as it is, or change it to work your way.</p>
+    <footer>Emil Kirilov</footer>
+  </blockquote>
+</section>
+
+<section class="part" id="install">
+  <p class="label">Install</p>
+  <h2>Install, and what it needs</h2>
+  <p data-unreleased>Sessia is not public yet, so the install command comes with the release.</p>
+  <pre class="steps" data-released><code>cd ~/Projects
+<button type="button" class="copy-line" data-copy-clone aria-label="Copy the git clone command"><span data-clone-to></span></button>
+cd sessia &amp;&amp; ./setup.sh</code></pre>
+  <p><code>setup.sh</code> switches on the hooks and the skills for every folder inside Sessia's folder, and starts the page at login, at <code>http://localhost:7357</code>. Running it again changes nothing. Keep your projects inside Sessia's folder: the rules and hooks act there, and its folders make the page's menu. Sessions elsewhere still show, under Other.</p>
+  <p>The page also works on its own: <code>python3 dashboard.py</code> in Sessia's folder starts it, with no setup. The rules and the hooks are what give the answers their structure.</p>
+  <h3>What it needs</h3>
+  <ul class="plain">
+    <li>macOS, Python 3, Claude Code, <code>git</code> 2.55 or later (for its config-based hooks) and <code>jq</code>.</li>
+    <li>VS Code, for the Open and Start buttons.</li>
+    <li><code>gh</code>, logged in, for merge requests.</li>
+  </ul>
+  <h3>What <code>setup.sh</code> changes, and how to undo it</h3>
+  <p>Each change, with the command that takes it back, for Sessia in <code>~/Projects/sessia</code>. Everything else it writes stays inside Sessia's folder.</p>
+  <dl class="honest undo">
+    <dt>The page starts at login</dt>
+    <dd>A login item in <code>~/Library/LaunchAgents/</code> starts the page and starts it again if it stops, with a log in <code>~/Library/Logs/</code>. The first line finds it by what it runs.
+      <pre><code>P=$(grep -lF "$HOME/Projects/sessia/dashboard.py" ~/Library/LaunchAgents/*.plist)
+launchctl bootout gui/$(id -u) "$P"
+rm "$(plutil -extract StandardErrorPath raw "$P")" "$P"</code></pre></dd>
+    <dt>The git hooks</dt>
+    <dd>One line in <code>~/.gitconfig</code> switches them on for every repo inside Sessia's folder, and nowhere else.
+      <pre><code>git config --global --unset "includeIf.gitdir:$HOME/Projects/sessia/.path"</code></pre></dd>
+    <dt>The Claude Code hooks</dt>
+    <dd>Six hooks in <code>~/.claude/settings.json</code>. Each does nothing in sessions outside Sessia's folder.
+      <pre><code>jq --arg p "$HOME/Projects/sessia/" '.hooks |= (map_values(map(.hooks |= map(select(.command // "" | startswith($p) | not)) | select(.hooks | length > 0))) | with_entries(select(.value | length > 0)))' ~/.claude/settings.json > /tmp/settings.json && mv /tmp/settings.json ~/.claude/settings.json</code></pre></dd>
+    <dt>Transcripts kept 90 days</dt>
+    <dd>Claude Code keeps them 30 by default; <code>setup.sh</code> sets 90 in <code>~/.claude/settings.json</code> only when you had set nothing.
+      <pre><code>jq 'del(.cleanupPeriodDays)' ~/.claude/settings.json > /tmp/settings.json && mv /tmp/settings.json ~/.claude/settings.json</code></pre></dd>
+    <dt>The skills</dt>
+    <dd>Links in <code>~/.claude/skills/</code> to <code>/add-rule</code>, <code>/review-mr</code> and <code>/move-in</code>.
+      <pre><code>find ~/.claude/skills -maxdepth 1 -type l -lname "$HOME/Projects/sessia/.claude/skills/*" -delete</code></pre></dd>
+    <dt>Claude's own memory off</dt>
+    <dd>Each repo in Sessia's folder gets <code>"autoMemoryEnabled": false</code> in its <code>.claude/settings.local.json</code>, which git there ignores.
+      <pre><code>find ~/Projects/sessia -maxdepth 4 -path '*/.claude/settings.local.json' -not -path '*/.worktrees/*' -exec sh -c 'jq "del(.autoMemoryEnabled)" "$1" > "$1.tmp" && mv "$1.tmp" "$1"' _ {} \;</code></pre></dd>
+  </dl>
+</section>
+
+<section class="part">
+  <p class="label">Next</p>
+  <h2>What's next</h2>
+  <p>Plans, not promises: other AI coding tools besides Claude Code, Linux, and a “Needs you” tab that gathers what waits for you in one place.</p>
+</section>
+
+</main>
+
+<footer class="bottom">
+  <a data-github data-released>GitHub</a>
+  <span data-released><span data-license></span> license</span>
+  <span>Made by <a href="https://www.lexis.solutions/" target="_blank" rel="noopener">Lexis Solutions</a></span>
+</footer>
+
+</body>
+</html>

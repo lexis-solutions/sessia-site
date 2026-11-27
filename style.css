@@ -1,0 +1,216 @@
+/* Sessia's website. The colours are Sessia's own themes (its dashboard.html), so the live copy never looks pasted
+   in. No accent colour: the status colours appear inside the product alone, where they mean a state. */
+
+@font-face { font-family: Geist; src: url(fonts/Geist-Variable.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url(fonts/GeistMono-Variable.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --bg: #ffffff; --text: #1d1d1b; --muted: #77756f; --line: #e3e1dc; --raise: #f6f6f4;
+  --pill: #1d1d1b; --pill-text: #ecebe7;
+  --gutter: 48px; --wide: 1344px; --column: 680px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0e0e0d; --text: #ecebe7; --muted: #94928b; --line: #33322f; --raise: #171716;
+    --pill: #20201e; --pill-text: #ecebe7;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e0e0d; --text: #ecebe7; --muted: #94928b; --line: #33322f; --raise: #171716;
+  --pill: #20201e; --pill-text: #ecebe7;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }  /* a link to a section lands below the sticky bar */
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 17px/1.6 Geist, system-ui, sans-serif; font-feature-settings: "ss01";
+  -webkit-font-smoothing: antialiased; overflow-x: clip;
+}
+a { color: inherit; text-decoration-color: var(--muted); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--text); }
+code, pre, .window-bar, .label { font-family: "Geist Mono", ui-monospace, monospace; }
+code { font-size: .9em; font-variant-ligatures: none; }  /* commands read as typed: no |= or != ligatures */
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-radius: 4px; }
+
+/* The top bar: it stays at the top as the page scrolls, full width so nothing shows beside it, its content in
+   the page's wide column. */
+.bar {
+  position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px max(var(--gutter), (100% - var(--wide)) / 2);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 620; font-size: 18px; text-decoration: none; letter-spacing: -.01em; }
+.brand svg { width: 28px; height: 28px; }
+.bar nav { display: flex; align-items: center; gap: 28px; font-size: 15px; }
+.bar nav a { text-decoration: none; color: var(--muted); }
+.bar nav a:hover { color: var(--text); }
+.theme {
+  display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid var(--line);
+  border-radius: 8px; background: none; color: var(--muted); cursor: pointer;
+}
+.theme:hover { color: var(--text); border-color: var(--muted); }
+.theme svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+/* The switch shows what a click gives: the sun on the dark theme, the moon on the light. */
+.theme .sun { display: none; }
+:root[data-theme="dark"] .theme .sun { display: block; }
+:root[data-theme="dark"] .theme .moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme .sun { display: block; }
+  :root:not([data-theme="light"]) .theme .moon { display: none; }
+}
+
+/* The first screen */
+main { max-width: calc(var(--wide) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
+.hero { padding-top: 56px; }
+h1 {
+  margin: 0; font-weight: 620; letter-spacing: -.035em; line-height: 1;
+  /* Fitted to the content width on one line: it measures 17.6 times its font size in Geist at this weight. */
+  font-size: calc(min(100vw - 2 * var(--gutter), var(--wide)) / 17.8);
+  text-wrap: balance;
+}
+.under { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; margin-top: 32px; }
+.lede { max-width: 640px; margin: 0; font-size: 20px; line-height: 1.55; }
+.act { flex: 0 1 auto; padding-top: 4px; }
+.buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.pill {
+  display: inline-flex; gap: 8px; max-width: 100%; padding: 11px 18px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--pill); color: var(--pill-text); font: 14px/1.3 "Geist Mono", monospace; cursor: pointer; text-align: left;
+}
+.pill span { opacity: .55; }
+/* One line always: on a narrow screen it scrolls inside the pill instead of breaking after "lexis-". */
+.act { max-width: 100%; }
+.pill { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.pill code { font-size: inherit; white-space: nowrap; }
+.pill:hover { border-color: var(--muted); }
+/* The git clone line in the Install steps: plain text in the block, with a dotted line under it to say it copies. */
+.copy-line { all: unset; cursor: pointer; text-decoration: underline dotted var(--muted); text-underline-offset: 4px; }
+.copy-line:hover { text-decoration-style: solid; }
+.copy-line:focus-visible { outline: 2px solid var(--muted); outline-offset: 2px; }
+.more { font-size: 15px; text-decoration: none; font-weight: 520; }
+.more:hover { text-decoration: underline; }
+.practical { margin: 20px 0 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
+
+/* The live copy, with the two claims to its left and a thin leader line from each to what it describes. */
+.stage { position: relative; display: grid; grid-template-columns: 220px 1fr; gap: 52px; margin-top: 44px; --scale: .85; }
+.notes { position: relative; }
+.note { position: absolute; left: 0; right: 0; margin: 0; font-size: 14.5px; line-height: 1.55; }
+.leaders { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.leaders path { fill: none; stroke: var(--muted); stroke-width: 1; }
+.leaders circle { fill: var(--text); }
+.window { --h: 700px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--raise); }
+.window-bar { padding: 9px 14px; border-bottom: 1px solid var(--line); text-align: center; font-size: 12.5px; color: var(--muted); }
+/* The copy is drawn at 85%, so its header fits on one row and more of it shows. */
+.viewport { height: var(--h); overflow: hidden; }
+.window iframe {
+  display: block; width: calc(100% / var(--scale)); height: calc(var(--h) / var(--scale)); border: 0; background: var(--bg);
+  transform: scale(var(--scale)); transform-origin: 0 0;
+}
+.caption { margin: 14px 0 0 272px; color: var(--muted); font-size: 13.5px; }
+
+/* The sections: one calm column. */
+.opening { max-width: var(--column); margin: 128px auto 0; }
+.opening p { margin: 0; font-size: 24px; line-height: 1.5; letter-spacing: -.01em; }
+.opening .practical { margin-top: 24px; font-size: 18px; letter-spacing: 0; }
+.part { max-width: var(--column); margin: 144px auto 0; }
+.label { margin: 0 0 14px; font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+h2 { margin: 0 0 14px; font-size: 36px; line-height: 1.15; font-weight: 620; letter-spacing: -.025em; text-wrap: balance; }
+h3 { margin: 40px 0 10px; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+.off { margin: 0 0 22px; font-size: 20px; line-height: 1.5; color: var(--muted); }
+.part p { margin: 0 0 16px; }
+.part .aside { color: var(--muted); font-size: 15px; }
+.plain { margin: 0; padding-left: 20px; }
+.plain li { margin: 4px 0; }
+
+/* A section's own live copy (live/?tab=…), at the first screen's scale. */
+.shot { margin: 36px calc((var(--column) - 1000px) / 2) 0; --scale: .85; }
+.shot .window { --h: 440px; }
+.shot figcaption { margin-top: 10px; color: var(--muted); font-size: 13.5px; }
+pre {
+  margin: 0; padding: 20px 22px; overflow-x: auto; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--raise); font-size: 13.5px; line-height: 1.6;
+}
+pre code { font-size: inherit; }
+.answer { margin: 32px calc((var(--column) - 1000px) / 2) 0; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 32px; align-items: start; }
+.answer pre { white-space: pre-wrap; }
+.parts { margin: 0; padding-left: 20px; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.parts li { margin-bottom: 14px; }
+.parts b { color: var(--text); font-weight: 560; }
+/* Hovering a note on the right lights up its part of the example answer, and fades the rest. */
+.answer pre span { border-radius: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: background .15s, color .15s; }
+.answer .parts li { cursor: default; transition: color .15s; }
+.answer .parts li:hover { color: var(--text); }
+.answer:has(.parts li:hover) pre code { color: var(--muted); }
+.answer:has(.parts li:nth-child(1):hover) [data-part="1"],
+.answer:has(.parts li:nth-child(2):hover) [data-part="2"],
+.answer:has(.parts li:nth-child(3):hover) [data-part="3"],
+.answer:has(.parts li:nth-child(4):hover) [data-part="4"],
+.answer:has(.parts li:nth-child(5):hover) [data-part="5"] { color: var(--text); background: color-mix(in srgb, var(--text) 11%, transparent); }
+/* A section's points at a glance: under its text (section 3), or beside it on a wide screen and above it on a narrower one (section 5). */
+.glance { margin: 24px 0; }
+.glance li { margin-bottom: 8px; }
+/* The list sits in the right margin as a grid column, so the live copy below starts under the longer of the two. */
+@media (min-width: 1400px) {  /* where the margin beside the column is wide enough */
+  .beside { display: grid; grid-template-columns: var(--column) 260px; grid-template-rows: auto 1fr; column-gap: 48px; margin-right: -308px; align-items: start; }
+  .beside > .glance { grid-column: 2; grid-row: 1 / span 2; margin: 4px 0 0; }
+  .beside > p { grid-column: 1; }
+}
+.steps { margin: 8px 0 20px; }
+
+/* Section 2: the same answer without the structure, above the example with it, as wide as the example. */
+.before { margin: 32px calc((var(--column) - 1000px) / 2) 0; padding: 18px 22px; border: 1px dashed var(--line); border-radius: 12px; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.part .before p { margin: 0; }
+.part .before .label { margin-bottom: 10px; }
+.part .with { margin: 32px calc((var(--column) - 1000px) / 2) 0; }
+.with + .answer { margin-top: 10px; }
+
+.honest { margin: 0; }
+.honest dt { margin-top: 18px; font-weight: 600; }
+.honest dd { margin: 4px 0 0; color: var(--muted); }
+.undo dd { overflow-wrap: anywhere; }
+.undo pre { margin-top: 8px; color: var(--text); }
+
+.personal { margin: 56px 0 0; padding: 4px 0 4px 22px; border-left: 1px solid var(--line); }
+.personal p { margin: 0 0 10px; font-size: 19px; line-height: 1.55; }
+.personal footer { color: var(--muted); font-size: 15px; }
+
+.bottom {
+  display: flex; flex-wrap: wrap; gap: 8px 28px; justify-content: center; margin-top: 144px; padding: 32px var(--gutter) 48px;
+  border-top: 1px solid var(--line); color: var(--muted); font-size: 14px;
+}
+.bottom a { text-decoration: none; }
+.bottom a:hover { color: var(--text); }
+
+/* Narrower screens: the shots and the example fit the column; the notes go above the live copy, without lines. */
+@media (max-width: 1100px) {
+  .shot, .answer, .before, .part .with { margin-left: 0; margin-right: 0; }
+  .answer { grid-template-columns: 1fr; }
+}
+@media (max-width: 1000px) {
+  .under { flex-direction: column; gap: 28px; }
+  .act { flex-basis: auto; }
+  .stage { grid-template-columns: 1fr; gap: 28px; }
+  .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .note { position: static; }
+  .leaders { display: none; }
+  .caption { margin-left: 0; }
+}
+@media (max-width: 640px) {
+  :root { --gutter: 16px; }
+  body { font-size: 16px; }
+  .bar nav { gap: 16px; }
+  .bar nav a[href="#how"] { display: none; }
+  .hero { padding-top: 36px; }
+  h1 { font-size: 42px; letter-spacing: -.03em; line-height: 1.04; }
+  .lede { font-size: 18px; }
+  .notes { grid-template-columns: 1fr; }
+  .opening { margin-top: 88px; }
+  .opening p { font-size: 20px; }
+  .part { margin-top: 104px; }
+  h2 { font-size: 28px; }
+  .off { font-size: 18px; }
+}

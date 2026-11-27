@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>.box { fill: #1d1d1b } .prompt { stroke: #fff } @media (prefers-color-scheme: dark) { .box { fill: #ecebe7 } .prompt { stroke: #20201e } }</style>
+  <rect class="box" width="32" height="32" rx="8"/>
+  <path class="prompt" d="M9 10.5l6 5.5-6 5.5" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="17" y="19.5" width="7.5" height="3" rx="1.5" fill="#2fbf71"/>
+</svg>
