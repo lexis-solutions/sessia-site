@@ -136,20 +136,32 @@ pre {
 }
 pre code { font-size: inherit; }
 .answer { margin: 32px calc((var(--column) - 1000px) / 2) 0; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 32px; align-items: start; }
-.answer pre { white-space: pre-wrap; }
 .parts { margin: 0; padding-left: 20px; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
 .parts li { margin-bottom: 14px; }
 .parts b { color: var(--text); font-weight: 560; }
-/* Hovering a note on the right lights up its part of the example answer, and fades the rest. */
-.answer pre span { border-radius: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: background .15s, color .15s; }
-.answer .parts li { cursor: default; transition: color .15s; }
-.answer .parts li:hover { color: var(--text); }
-.answer:has(.parts li:hover) pre code { color: var(--muted); }
-.answer:has(.parts li:nth-child(1):hover) [data-part="1"],
-.answer:has(.parts li:nth-child(2):hover) [data-part="2"],
-.answer:has(.parts li:nth-child(3):hover) [data-part="3"],
-.answer:has(.parts li:nth-child(4):hover) [data-part="4"],
-.answer:has(.parts li:nth-child(5):hover) [data-part="5"] { color: var(--text); background: color-mix(in srgb, var(--text) 11%, transparent); }
+/* The example answer as it renders, in a card, with its notes beside it. Hovering a part lights its note, and hovering a note lights its part; the rest fades. */
+.answer > div { min-width: 0; }
+.answer .reply { padding: 18px 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--raise); font-size: 15px; line-height: 1.55; }
+.answer .reply .seg { position: relative; margin: 2px 0; padding: 8px 12px 6px 44px; }
+.answer .reply .seg > .n { position: absolute; left: 12px; top: 10px; }
+.answer .reply p { margin: 0 0 6px; }
+.answer .reply .lead { margin: 0; font-weight: 560; }
+.answer .reply h4 { margin: 0 0 6px; font-size: 19px; line-height: 1.25; font-weight: 620; letter-spacing: -.015em; }
+.answer .reply h5 { margin: 0 0 6px; font-size: 15px; font-weight: 620; }
+.answer .reply .in-detail { margin: 14px 0 4px 12px; }
+.answer .reply ul, .answer .reply ol { margin: 0 0 4px; padding-left: 22px; }
+.answer .reply li { margin: 3px 0; }
+.answer .reply .status { padding: 0; list-style: none; }
+.answer .reply pre { margin: 8px 0 0; padding: 10px 12px; background: var(--bg); border-radius: 8px; font-size: 12.5px; }
+.answer .parts { padding: 0; list-style: none; }
+.answer .parts li { display: flex; gap: 10px; margin: 0 0 4px; padding: 8px 10px; }
+.n { display: inline-grid; place-items: center; flex: none; width: 22px; height: 22px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); color: var(--muted); font: 11.5px/1 "Geist Mono", ui-monospace, monospace; transition: color .15s, border-color .15s; }
+.answer [data-k] { border-radius: 8px; transition: opacity .15s, background .15s; }
+.answer:has([data-k]:hover) [data-k], .answer:has([data-k]:hover) .fade { opacity: .26; }
+.answer:has([data-k="1"]:hover) [data-k="1"], .answer:has([data-k="2"]:hover) [data-k="2"], .answer:has([data-k="3"]:hover) [data-k="3"],
+.answer:has([data-k="4"]:hover) [data-k="4"], .answer:has([data-k="5"]:hover) [data-k="5"], .answer:has([data-k="6"]:hover) [data-k="6"],
+.answer:has([data-k="7"]:hover) [data-k="7"] { opacity: 1; color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+.answer [data-k]:hover > .n { border-color: var(--text); color: var(--text); }
 /* A section's points at a glance: under its text (section 3), or beside it on a wide screen and above it on a narrower one (section 5). */
 .glance { margin: 24px 0; }
 .glance li { margin-bottom: 8px; }

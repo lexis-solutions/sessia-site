@@ -99,31 +99,59 @@
   </div>
   <p class="label with">With it</p>
   <div class="answer">
-    <pre><code><span data-part="1">📌 Invoice export fix</span>
-
-<span data-part="2">🔴 Not done: 1 task waits for you, 1 is ready for your check</span>
-
-<span data-part="3">## In short
-- ⏳ You: include cancelled invoices in the export? (A include, B leave out, my pick B)
-- 👀 Ready for your check: merge request #41, the export no longer times out
-- ✅ Found why it timed out: one database query per invoice
-
-The export now runs one query for all invoices and takes 4 seconds instead of timing out.</span>
-
-## In detail
-### Needs your decision
-<span data-part="4">1. **Should the export include cancelled invoices?** The old export did, by accident, and the accountants may rely on it.
-   - A: include them, as before.
-   - B (recommended): leave them out. Nobody can pay them.
-   - My pick is B: it matches what the invoice list shows.</span>
-### For your information
-<span data-part="5">- **Correction: the timeout was in our code, not the server.** I said earlier it was the server's memory; it was one query per invoice. Nothing to do.</span></code></pre>
+    <div>
+      <div class="reply">
+        <div class="seg" data-k="1"><span class="n">1</span><p class="lead">📌 Invoice export fix</p></div>
+        <div class="seg" data-k="2"><span class="n">2</span><p>🔴 Not done: 1 task waits for you, 1 is ready for your check</p></div>
+        <div class="seg" data-k="3"><span class="n">3</span>
+          <h4>In short</h4>
+          <ul class="status">
+            <li>⏳ You: include cancelled invoices in the export? (A include, B leave out, my pick B)</li>
+            <li>👀 Ready for your check: merge request #41, the export no longer times out</li>
+            <li>✅ Found why it timed out: one database query per invoice</li>
+          </ul>
+          <p>The export now runs one query for all invoices and takes 4 seconds instead of timing out.</p>
+        </div>
+        <h4 class="fade in-detail">In detail</h4>
+        <div class="seg" data-k="4"><span class="n">4</span>
+          <h5>Needs your decision</h5>
+          <ol>
+            <li><b>Should the export include cancelled invoices?</b> The old export did, by accident, and the accountants may rely on it.
+              <ul>
+                <li>A: include them, as before.</li>
+                <li>B (recommended): leave them out. Nobody can pay them.</li>
+                <li>My pick is B: it matches what the invoice list shows.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+        <div class="seg" data-k="5"><span class="n">5</span>
+          <h5>For your information</h5>
+          <ul>
+            <li><b>Correction: the timeout was in our code, not the server.</b> I said earlier it was the server's memory; it was one query per invoice. Nothing to do.</li>
+          </ul>
+        </div>
+        <div class="seg" data-k="6"><span class="n">6</span>
+          <h4>Bugs</h4>
+          <p>🔧 invoices: the export timed out with a few thousand invoices; the fix is in merge request #41 🆕</p>
+        </div>
+        <div class="seg" data-k="7"><span class="n">7</span>
+          <h4>Branches</h4>
+          <p>🟡 invoices: fix-export-timeout, merge request #41 is open. To try it, on your Mac:</p>
+          <pre><code>cd ~/Projects/invoices/.worktrees/invoices-fix-export
+php artisan serve --port=8002</code></pre>
+        </div>
+      </div>
+      <p class="aside">When they apply, an answer also has: TODO and scheduled, Commands for you, Want me to?, To copy.</p>
+    </div>
     <ol class="parts">
-      <li><b>The 📌 label</b> names the tab and the session's card, so many tabs read as many different jobs.</li>
-      <li><b>The verdict line</b> says at a glance whether the session is finished.</li>
-      <li><b>In short</b> is the whole state in a few lines, what needs you at the top, with at most three lines under it.</li>
-      <li><b>A decision</b> carries its background, lettered options and a pick, so you can answer it without having followed the session: “1 B”.</li>
-      <li><b>A correction</b> is named as one, so nothing you were told earlier stays wrong.</li>
+      <li data-k="1"><span class="n">1</span><span><b>The 📌 label</b> names the tab and the session's card, so many tabs read as many different jobs.</span></li>
+      <li data-k="2"><span class="n">2</span><span><b>The verdict line</b> says at a glance whether the session is finished.</span></li>
+      <li data-k="3"><span class="n">3</span><span><b>In short</b> is the whole state in a few lines, what needs you at the top, with at most three lines under it.</span></li>
+      <li data-k="4"><span class="n">4</span><span><b>A decision</b> carries its background, lettered options and a pick, so you can answer it without having followed the session: “1 B”.</span></li>
+      <li data-k="5"><span class="n">5</span><span><b>A correction</b> is named as one, so nothing you were told earlier stays wrong.</span></li>
+      <li data-k="6"><span class="n">6</span><span><b>Bugs</b> lists every bug the session logged, worked on or fixed, and where each one stands.</span></li>
+      <li data-k="7"><span class="n">7</span><span><b>Branches</b> lists each branch with its merge request and the commands to try it, so nothing is left to find.</span></li>
     </ol>
   </div>
 </section>
