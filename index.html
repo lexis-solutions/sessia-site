@@ -188,7 +188,18 @@ The export now runs one query for all invoices and takes 4 seconds instead of ti
   <h2>It runs on your machine</h2>
   <p class="off">No account to make, and no server of ours that your sessions pass through.</p>
   <p>Sessia runs on your machine, at <code>localhost</code>, and reads the files Claude Code and git already keep. What it asks outside: through your own <code>gh</code> login it reads merge requests and commit authors' pictures from GitHub, and for a GitLab repo it sends a commit e-mail to a picture service. It is tested on throwaway repos: checks of the page's logic, a test in a real browser, and a test for each hook.</p>
-  <p>Proof from use, all on one person's Mac: 34 sessions at once, 15 repos, 238 sessions in 21 days.</p>
+  <h3>Proof from use</h3>
+  <p class="aside">All on one person's Mac, in six weeks.</p>
+  <ul class="stats">
+    <li><b>30</b> sessions working at once, in the same 15 minutes</li>
+    <li><b>98</b> sessions worked in one day</li>
+    <li><b>1,300</b> sessions in six weeks</li>
+    <li><b>17</b> repos with commits in one week, of 26</li>
+    <li><b>4,171</b> commits made with Claude</li>
+    <li><b>409</b> merge requests merged in two weeks</li>
+    <li><b>556</b> bugs written down along the way, 332 of them closed since</li>
+    <li><b>823</b> to-dos written down, 572 of them closed since</li>
+  </ul>
   <h3>The plain limits</h3>
   <ul class="plain">
     <li>Claude Code, macOS and GitHub today, and VS Code for the Open and Start buttons.</li>
@@ -213,11 +224,83 @@ The export now runs one query for all invoices and takes 4 seconds instead of ti
   <p class="off">You no longer explain the same thing to every session.</p>
   <p>Each rule came from something that went wrong or got in the way, and carries its date and its reason. <code>/add-rule</code> turns a sentence into a rule and puts it live. Facts go into the repo, not into one machine's memory, so a colleague's sessions know what yours know, and the facts can be reviewed like code.</p>
   <p>A session that ended on a finished report leaves the list by itself, so what is listed is still open, and an empty page means you are done.</p>
-  <p>And a small extra, on cost: a session re-reads its whole conversation on every turn, so a long conversation costs more on every turn. The rules ask for short conversations and cheaper models for easy work, and the page shows each conversation's size in grey, amber or red.</p>
   <blockquote class="personal">
     <p>I built Sessia for myself. It is not perfect, and I am still finding my way, but it does wonders for me. Take it as it is, or change it to work your way.</p>
     <footer>Emil Kirilov</footer>
   </blockquote>
+</section>
+
+<section class="part" id="cost">
+  <p class="label">9 · Cost</p>
+  <h2>A model call cost about 40% less</h2>
+  <p class="off">A session re-reads its whole conversation on every turn, so a long one costs more on every turn.</p>
+  <ul class="plain">
+    <li>The rules ask a session to hand over to a new one at 100k tokens, and at 200k at the latest.</li>
+    <li>They ask for a cheaper model for easy work.</li>
+    <li>The page shows each conversation's size in grey, amber or red.</li>
+  </ul>
+
+  <p class="label sub">Three weeks before the rules, two weeks after</p>
+  <div class="charts">
+    <div>
+      <p class="title">Model calls that re-read over 200k tokens</p>
+      <div class="bars">
+        <small>before</small><span class="fill was" style="--w: 90%"></span><span>45%</span>
+        <small>after</small><span class="fill" style="--w: 36%"></span><b>18%</b>
+      </div>
+    </div>
+    <div>
+      <p class="title">Tokens that went to Sonnet, the cheaper model</p>
+      <div class="bars">
+        <small>before</small><span class="fill was" style="--w: 8%"></span><span>4%</span>
+        <small>after</small><span class="fill" style="--w: 74%"></span><b>37%</b>
+      </div>
+    </div>
+    <div>
+      <p class="title">Sessions that Claude Code compacted</p>
+      <div class="bars">
+        <small>before</small><span class="fill was" style="--w: 52%"></span><span>26%, a quarter</span>
+        <small>after</small><span class="fill" style="--w: 10%"></span><b>5%, one in twenty</b>
+      </div>
+    </div>
+  </div>
+
+  <h3>Handing over mostly replaces compaction</h3>
+  <div class="cards">
+    <div>
+      <p class="label">Compaction</p>
+      <p>A summary Claude Code writes by itself.</p>
+      <p>1 session in 4 → <b>1 in 20</b></p>
+    </div>
+    <div class="now">
+      <p class="label">A hand-over</p>
+      <p>A prompt the session writes on purpose, with what the next session needs. You can read it.</p>
+      <p><span>almost none →</span> <b>44% of sessions</b></p>
+    </div>
+  </div>
+
+  <h3>What the saving buys is up to you</h3>
+  <p class="aside">The busiest week since, against the busiest week before:</p>
+  <div class="charts two">
+    <div>
+      <p class="title">Model calls</p>
+      <div class="bars">
+        <small>before</small><span class="fill was" style="--w: 70%"></span><span></span>
+        <small>since</small><span class="fill" style="--w: 100%"></span><b>42% more</b>
+      </div>
+    </div>
+    <div>
+      <p class="title">What the week cost</p>
+      <div class="bars">
+        <small>before</small><span class="fill was" style="--w: 100%"></span><span></span>
+        <small>since</small><span class="fill" style="--w: 78%"></span><b>22% less</b>
+      </div>
+    </div>
+  </div>
+  <ul class="plain spend">
+    <li>Pay for a cheaper plan, or do about two thirds more on the one you have.</li>
+  </ul>
+  <p class="aside">One person's use, not a controlled test. Cost is counted at the API's list prices, as a yardstick: a plan is billed differently.</p>
 </section>
 
 <section class="part" id="install">
@@ -284,7 +367,7 @@ git -C ~/Projects/sessia config --unset sessia.root</code></pre></dd>
     <dt>Does it change Claude Code, or my own <code>CLAUDE.md</code> files?</dt>
     <dd>Claude Code itself and your repos' own <code>CLAUDE.md</code> files stay as they are. Sessia's rules are a <code>CLAUDE.md</code> in the projects folder, which Claude Code reads above each project's own. The main changes <code>setup.sh</code> makes, to Claude Code's settings among them, are listed under Install, with how to undo them.</dd>
     <dt>Does it cost tokens?</dt>
-    <dd>Sessia itself costs nothing. Its rules are about 37 KB of text that each session re-reads on every turn, and a cheap model, Haiku, checks some answers, so they add some tokens. They also ask for short conversations and cheaper models for easy work. How much that saves is not measured yet.</dd>
+    <dd>Sessia itself costs nothing. Its rules are about 37 KB of text that each session re-reads on every turn, and a cheap model, Haiku, checks some answers, so they add some tokens. They also ask for short conversations and cheaper models for easy work, and on one person's use a model call then cost about 40% less (<a href="#cost">Cost</a>).</dd>
     <dt>Can I use it with colleagues?</dt>
     <dd>Today each person runs Sessia on their own machine, for their own sessions, and there is no shared view. The facts and rules live in the repos, so a colleague's sessions know what yours know. Using it together is something we are thinking about.</dd>
     <dt>Does it run on Windows?</dt>
