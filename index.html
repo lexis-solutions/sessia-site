@@ -29,6 +29,7 @@
   <nav>
     <a href="#how">How it works</a>
     <a href="#install">Install</a>
+    <a href="#faq">FAQ</a>
     <a data-github data-released>GitHub</a>
     <button type="button" class="theme" id="theme" aria-label="Switch to the light theme">
       <svg class="sun" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 1.8v1.9M10 16.3v1.9M1.8 10h1.9M16.3 10h1.9M4.2 4.2l1.35 1.35M14.45 14.45l1.35 1.35M4.2 15.8l1.35-1.35M14.45 5.55l1.35-1.35"/></svg>
@@ -226,7 +227,7 @@ The export now runs one query for all invoices and takes 4 seconds instead of ti
   <pre class="steps" data-released><code>cd ~/Projects
 <button type="button" class="copy-line" data-copy-clone aria-label="Copy the git clone command"><span data-clone-to></span></button>
 cd sessia &amp;&amp; ./setup.sh</code></pre>
-  <p><code>setup.sh</code> switches on the hooks and the skills for every folder inside Sessia's folder, and starts the page at login, at <code>http://localhost:7357</code>. Running it again changes nothing. Keep your projects inside Sessia's folder: the rules and hooks act there, and its folders make the page's menu. Sessions elsewhere still show, under Other.</p>
+  <p><code>setup.sh</code> switches on the hooks and the skills for every folder inside Sessia's folder, and starts the page at login, at <code>http://localhost:7357</code>. Running it again changes nothing. Keep your projects inside Sessia's folder, or keep them where they are with <code>./setup.sh root-dir=~/code</code>: the rules and hooks act in the projects folder, and its folders make the page's menu. Sessions elsewhere still show, under Other.</p>
   <p>The page also works on its own: <code>python3 dashboard.py</code> in Sessia's folder starts it, with no setup. The rules and the hooks are what give the answers their structure.</p>
   <h3>What it needs</h3>
   <ul class="plain">
@@ -235,7 +236,7 @@ cd sessia &amp;&amp; ./setup.sh</code></pre>
     <li><code>gh</code>, logged in, for merge requests.</li>
   </ul>
   <h3>What <code>setup.sh</code> changes, and how to undo it</h3>
-  <p>Each change, with the command that takes it back, for Sessia in <code>~/Projects/sessia</code>. Everything else it writes stays inside Sessia's folder.</p>
+  <p>Each change, with the command that takes it back, for Sessia in <code>~/Projects/sessia</code>. If you named another projects folder with <code>root-dir</code>, put that folder in place of <code>~/Projects/sessia</code> in the git hooks' line and in Claude's memory line. Everything else it writes stays inside Sessia's folder.</p>
   <dl class="honest undo">
     <dt>The page starts at login</dt>
     <dd>A login item in <code>~/Library/LaunchAgents/</code> starts the page and starts it again if it stops, with a log in <code>~/Library/Logs/</code>. The first line finds it by what it runs.
@@ -254,9 +255,17 @@ rm "$(plutil -extract StandardErrorPath raw "$P")" "$P"</code></pre></dd>
     <dt>The skills</dt>
     <dd>Links in <code>~/.claude/skills/</code> to <code>/add-rule</code>, <code>/review-mr</code> and <code>/move-in</code>.
       <pre><code>find ~/.claude/skills -maxdepth 1 -type l -lname "$HOME/Projects/sessia/.claude/skills/*" -delete</code></pre></dd>
+    <dt>The model-advice mod</dt>
+    <dd>A Claude Code plugin, from Sessia's own plugin source, that suggests a cheaper or stronger model before a message is sent.
+      <pre><code>claude plugin uninstall model-advice@sessia
+claude plugin marketplace remove sessia</code></pre></dd>
     <dt>Claude's own memory off</dt>
     <dd>Each repo in Sessia's folder gets <code>"autoMemoryEnabled": false</code> in its <code>.claude/settings.local.json</code>, which git there ignores.
       <pre><code>find ~/Projects/sessia -maxdepth 4 -path '*/.claude/settings.local.json' -not -path '*/.worktrees/*' -exec sh -c 'jq "del(.autoMemoryEnabled)" "$1" > "$1.tmp" && mv "$1.tmp" "$1"' _ {} \;</code></pre></dd>
+    <dt>A projects folder named with <code>root-dir</code></dt>
+    <dd>Links in that folder to Sessia's rules and hooks, and the folder's name in Sessia's own git settings. For <code>~/code</code>:
+      <pre><code>rm ~/code/CLAUDE.md ~/code/.claude/on-demand ~/code/.claude/hooks
+git -C ~/Projects/sessia config --unset sessia.root</code></pre></dd>
   </dl>
 </section>
 
@@ -264,6 +273,27 @@ rm "$(plutil -extract StandardErrorPath raw "$P")" "$P"</code></pre></dd>
   <p class="label">Next</p>
   <h2>What's next</h2>
   <p>Plans, not promises: other AI coding tools besides Claude Code, Linux, and a “Needs you” tab that gathers what waits for you in one place.</p>
+</section>
+
+<section class="part" id="faq">
+  <p class="label">FAQ</p>
+  <h2>Questions people ask</h2>
+  <dl class="honest faq">
+    <dt>Do I have to move my projects into Sessia's folder?</dt>
+    <dd>No. <code>./setup.sh root-dir=~/code</code> makes your own folder the projects folder: it links Sessia's rules and hooks into it, and stops if the folder already has a <code>CLAUDE.md</code> of its own. Its folders then make the page's menu, and the page can change the folder later.</dd>
+    <dt>Does it change Claude Code, or my own <code>CLAUDE.md</code> files?</dt>
+    <dd>Claude Code itself and your repos' own <code>CLAUDE.md</code> files stay as they are. Sessia's rules are a <code>CLAUDE.md</code> in the projects folder, which Claude Code reads above each project's own. The main changes <code>setup.sh</code> makes, to Claude Code's settings among them, are listed under Install, with how to undo them.</dd>
+    <dt>Does it cost tokens?</dt>
+    <dd>Sessia itself costs nothing. Its rules are about 37 KB of text that each session re-reads on every turn, and a cheap model, Haiku, checks some answers, so they add some tokens. They also ask for short conversations and cheaper models for easy work. How much that saves is not measured yet.</dd>
+    <dt>Can I use it with colleagues?</dt>
+    <dd>Today each person runs Sessia on their own machine, for their own sessions, and there is no shared view. The facts and rules live in the repos, so a colleague's sessions know what yours know. Using it together is something we are thinking about.</dd>
+    <dt>Does it run on Windows?</dt>
+    <dd>The page does, started by hand with <code>start-sessia.cmd</code>, but <code>setup.sh</code>, the hooks and the start at login are macOS only.<span data-released> If you use it on Windows, open pull requests: help in that direction is welcome, and we will extend it quickly.</span> Some of that work is planned on a Windows machine of our own.</dd>
+    <dt>Can I try it without changing my setup?</dt>
+    <dd>Yes. The live copy at the top is the page with made-up sessions.<span data-released> In a clone, <code>python3 demo.py . 7399</code> runs it on made-up sessions at <code>localhost:7399</code>, and <code>python3 dashboard.py</code> starts it on your own sessions, with no setup.</span></dd>
+    <dt>Can I change the rules?</dt>
+    <dd>Yes. <code>/add-rule</code> turns a sentence into a rule and puts it live, or you edit them yourself: they are plain Markdown in Sessia's folder.<span data-released> Fork it if your way differs.</span></dd>
+  </dl>
 </section>
 
 </main>
