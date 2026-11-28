@@ -7,6 +7,9 @@
 const RELEASED = false;
 const GITHUB = 'https://github.com/lexis-solutions/sessia';
 const LICENSE = 'MIT';
+// Questions and ideas go to the public site repo's Discussions, which works before the release. At release, point
+// it at Sessia's own repo (GITHUB + '/discussions'), which needs the same two categories, Q&A and Ideas.
+const DISCUSSIONS = 'https://github.com/lexis-solutions/sessia-site/discussions';
 
 for (const el of document.querySelectorAll(RELEASED ? '[data-unreleased]' : '[data-released]')) el.remove();
 
@@ -15,6 +18,7 @@ const live = document.getElementById('live');
 
 // GitHub opens in a new tab, so the site stays where the visitor was.
 for (const a of document.querySelectorAll('[data-github]')) Object.assign(a, { href: GITHUB, target: '_blank', rel: 'noopener' });
+for (const a of document.querySelectorAll('[data-discuss]')) Object.assign(a, { href: `${DISCUSSIONS}/${a.dataset.discuss}`.replace(/\/$/, ''), target: '_blank', rel: 'noopener' });
 for (const el of document.querySelectorAll('[data-license]')) el.textContent = LICENSE;
 const clone = `git clone ${GITHUB}`;
 for (const el of document.querySelectorAll('[data-clone], [data-clone-to]')) el.textContent = clone;
