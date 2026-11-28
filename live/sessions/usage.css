@@ -1,0 +1,67 @@
+/* The tokens a project's sessions used: the numbers at the right end of a column's name (usageChip() in core.js) and the card
+   that opens on them (usageCard()): frosted like the page's other tooltips, with gradient bars, and a tinted pill on the name
+   once a limit is near. A meter's --p is how full its limit is (0 to 100), a day's --h its height against the month's highest. */
+
+/* The numbers: shown while the pointer or the focus is on the name, and always from 80% of a limit (.near, orange) and 90% (.over, red).
+   :where() keeps this base weaker than the colours and the pill below, which a plain `h2.col .usage` outranked. */
+h2.col .u-slot { flex: none; display: inline-flex; margin-left: auto; padding-left: 10px; }
+h2.col :where(.usage) { display: inline-flex; align-items: center; gap: 5px; padding: 0; border: none; border-radius: 999px; background: none; color: inherit;
+                font: inherit; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; font-variant-numeric: tabular-nums; opacity: 0; }
+h2.col:is(:hover, :focus-within) .usage, h2.col .usage:is(.near, .over) { opacity: 1; }
+h2.col .usage:focus-visible { outline: 2px solid var(--busy); outline-offset: 2px; }
+.usage.near { color: var(--waiting-text); }
+.usage.over { color: var(--bad); }
+.usage:is(.near, .over) { padding: 1px 8px; background: color-mix(in srgb, currentColor 14%, transparent); }
+.usage .u-pct { font-weight: 700; }
+
+/* The card, in the page's tooltip: the tooltip's own frame steps aside, and an invisible margin around it lets the pointer cross
+   from the numbers to the card without closing it. */
+#tip.usage { max-width: none; padding: 0; border: none; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; pointer-events: auto; }
+#tip.usage::before { content: ''; position: absolute; inset: -12px; z-index: -1; }
+.ucard { width: 304px; padding: 12px 14px; border: 1px solid var(--tip-line); border-radius: 14px; background: var(--tip-bg); font-size: 12px; line-height: 1.4;
+         color: var(--tip-text); box-shadow: 0 14px 36px rgba(0, 0, 0, .22); -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5); }
+.ucard { max-height: var(--room, 100vh); overflow-y: auto; overscroll-behavior: contain; }  /* a window too short for it: the card scrolls (--room, showTip() in main.js) */
+.ucard header { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.u-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 600; }
+.u-sub, .u-label, .u-of, .u-stats dt, .u-legend, .u-limits label, .u-limits p { color: var(--muted); }
+.u-sub { flex: none; }
+.u-meters { display: grid; gap: 10px; margin: 12px 0 10px; }
+.u-meter { --c: var(--busy); display: grid; grid-template-columns: 1fr auto auto; align-items: baseline; column-gap: 6px; }
+.u-meter.near { --c: var(--waiting); }
+.u-meter.over { --c: var(--bad); }
+.u-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+.u-bar { grid-column: 1 / -1; height: 6px; margin-top: 4px; border-radius: 3px;
+         background: linear-gradient(90deg, color-mix(in srgb, var(--c) 45%, transparent), var(--c)) 0 0 / calc(var(--p) * 1%) 100% no-repeat, var(--line); }
+.u-days { position: relative; display: flex; align-items: flex-end; gap: 2px; height: 38px; margin: 4px 0 10px; }
+.u-days i { flex: 1; height: max(2px, calc(var(--h) * 100%)); border-radius: 2px 2px 0 0; background: color-mix(in srgb, var(--busy) 40%, transparent); }
+.u-days i.now { background: var(--busy); }
+.u-days i.near { background: var(--waiting); }
+.u-days i.over { background: var(--bad); }
+.u-line { position: absolute; inset: auto 0 calc(var(--h) * 100%); border-top: 1px dashed var(--bad); }  /* the daily limit */
+.u-stats { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0; }
+.u-stats dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+/* What counts towards the totals and what doesn't, today and this month: a table with a total line, and the cache reads in a grey box under it. */
+/* productivity.css styles every table and cell of the page (a frame, a white ground, lines under rows): none of that here. */
+.u-split, .u-split :is(th, td) { border: none; background: none; font-size: inherit; }
+.u-split { width: 100%; box-sizing: border-box; margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--tip-line); border-collapse: separate; border-spacing: 0;
+           table-layout: fixed; font-size: inherit; line-height: inherit; font-variant-numeric: tabular-nums; }
+.u-split thead th { width: 27%; }
+.u-split thead th:first-child { width: 46%; }  /* fixed widths, so the two tables' columns line up */
+.u-split th { padding: 1px 0; font-weight: 400; text-align: left; color: var(--muted); }
+.u-split td { padding: 1px 0 1px 12px; text-align: right; white-space: nowrap; }
+.u-split thead th { padding-bottom: 2px; font-size: 10.5px; text-align: right; }
+.u-split thead th:first-child { text-align: left; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+.u-split .u-total :is(th, td) { padding-top: 3px; border-top: 1px solid var(--line); font-weight: 600; color: var(--tip-text); }
+.u-split.u-skip { width: calc(100% + 12px); margin: 6px -6px 0; padding: 5px 6px; border: none; border-radius: 8px; background: color-mix(in srgb, var(--tip-text) 5%, transparent); }
+.u-split.u-skip :is(th, td) { color: var(--muted); }
+.u-hide { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }  /* the columns' names, for a screen reader: the table above shows them */
+.u-split + .u-stats { margin-top: 8px; }
+.u-models { display: flex; gap: 2px; height: 6px; margin-top: 10px; border-radius: 3px; overflow: hidden; }
+.u-legend { display: flex; flex-wrap: wrap; gap: 2px 10px; margin: 5px 0 0; }
+.u-legend i { display: inline-block; width: 8px; height: 8px; margin-right: 4px; border-radius: 2px; }
+.m-opus { background: #d97757; } .m-sonnet { background: #6a8fd8; } .m-haiku { background: #3fb68b; } .m-fable { background: #a77ee6; } .m-other { background: var(--idle); }
+.u-limits { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--tip-line); }
+.u-limits label { display: grid; gap: 3px; }
+.u-limits input { width: 100%; padding: 4px 7px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); font: inherit; font-variant-numeric: tabular-nums; }
+.u-limits input:focus { outline: 2px solid var(--busy); outline-offset: -1px; }
+.u-limits p { grid-column: 1 / -1; margin: 0; font-size: 11px; }

@@ -1,0 +1,189 @@
+/* The left panel's own styles (panel.js): the logo's row with the bucket menu, the menu of tabs with their counts, and
+   when /data last answered. The page's grid that puts it on the left is page.css's. */
+/* The menu is a panel on the left, under the logo and the name, and stays in place while the page
+   scrolls: the page needs its height more than its width (Emil Kirilov asked on 2026-11-17). On a
+   narrow window it goes back on top, as a row. */
+aside { position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto; display: flex; flex-direction: column;
+        gap: 16px; padding: 16px 10px; background: var(--card); border-right: 1px solid var(--line); }
+/* The logo's row: the name, then the bucket menu ("Sessia / Atlas ⌄"), and a line under it, between it and the tabs. */
+.brand { display: flex; align-items: center; gap: 4px; min-width: 0; margin: 0 -10px; padding: 0 8px 15px 16px; border-bottom: 1px solid var(--line);
+         font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+.brand .sl { color: var(--idle); font-weight: 400; font-size: 20px; }
+.brand svg { flex: none; width: 28px; height: 28px; margin-right: 4px; }
+nav { display: flex; flex-direction: column; gap: 8px; }
+/* The bucket menu, at the name: the button names the shown bucket (and "+1" for each more), its menu lists
+   every bucket with what waits there. A click shows that one alone, ⌘-click (Ctrl-click) or Space adds it
+   or takes it away. Emil Kirilov picked this look on 2026-11-20 from five. */
+#bucket-btn { display: flex; align-items: center; gap: 3px; min-width: 0; padding: 2px 4px; border: none; border-radius: 6px;
+              background: none; color: var(--text); font: inherit; font-size: 14px; font-weight: 600; letter-spacing: 0; cursor: pointer; }
+#bucket-btn:hover, #bucket-btn[aria-expanded="true"] { background: var(--bg); }
+#bucket-btn:focus-visible { outline: 2px solid var(--busy); outline-offset: 1px; }
+#bucket-btn .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#bucket-btn .more { flex: none; font-size: 11px; padding: 0 4px; border-radius: 8px; background: var(--line); }
+#bucket-btn svg { flex: none; width: 10px; height: 10px; color: var(--muted); }
+#bucket-menu { position: fixed; inset: auto; margin: 0; min-width: 240px; padding: 4px; color: var(--text); background: var(--card);
+               border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18); }
+#bucket-menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 8px; border: none; border-radius: 6px;
+                      background: none; color: inherit; font: inherit; font-size: 14px; text-align: left; }
+#bucket-menu button:hover, #bucket-menu button:focus-visible { background: var(--bg); outline: none; }
+#bucket-menu .tick { width: 14px; flex: none; color: var(--busy); font-weight: 700; text-align: center; }
+#bucket-menu .ico { width: 14px; height: 14px; flex: none; color: var(--muted); }
+#bucket-menu .slot { width: 14px; flex: none; }
+#bucket-menu .grow { flex: 1; }
+#bucket-menu .wait { font-size: 12px; font-weight: 600; color: var(--waiting-text); }
+#bucket-menu hr { margin: 4px 0; border: none; border-top: 1px solid var(--line); }
+#bucket-menu .hint { margin: 0; padding: 2px 8px 4px; font-size: 12px; color: var(--muted); }
+/* Its list since 2026-11-25 (design D): a small title that does nothing, "All buckets" first with an empty slot where a client has its folder
+   (since 2026-11-26 a folder icon, not a coloured dot), and Add a bucket… last, in blue, with a + there (move.js). A client's line ends in a + of its own, faint
+   grey and blue under the pointer (Emil Kirilov's pick the same day, B of two: it shows which buckets take a folder). */
+#bucket-menu .title { padding: 4px 8px 2px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+#bucket-menu #add-bucket { color: var(--busy); }
+#bucket-menu .plus { width: 8px; height: 8px; flex: none; }
+#bucket-menu .line { display: flex; align-items: center; gap: 2px; }
+#bucket-menu .line > [data-only] { flex: 1; min-width: 0; }
+/* Dragging a project onto a client (2026-11-27): the projects take the grab cursor, and the client under the pointer is outlined in blue. */
+#bucket-menu [draggable] { cursor: grab; }
+#bucket-menu .line.drop { border-radius: 8px; background: color-mix(in srgb, var(--busy) 14%, transparent); box-shadow: 0 0 0 1.5px var(--busy); }
+#bucket-menu .add-to { width: 28px; flex: none; justify-content: center; padding: 8px 0; color: color-mix(in srgb, var(--muted) 75%, var(--card)); }
+#bucket-menu .add-to:hover, #bucket-menu .add-to:focus-visible { color: var(--busy); }
+#bucket-menu .add-to .plus { width: 10px; height: 10px; }
+nav button { display: flex; align-items: center; gap: 5px; width: 100%; text-align: left; font-size: 14px; font-weight: 600;
+             padding: 6px 10px; border-radius: 8px; border-color: transparent; color: var(--muted); background: none; }
+nav button[hidden] { display: none; }
+nav button:hover, nav button[aria-selected="true"] { background: var(--bg); color: var(--text); border-color: transparent; }
+nav button[aria-selected="true"] { border-color: var(--muted); }
+nav button.danger { color: var(--bad); border-color: var(--bad);
+                    box-shadow: 0 0 0 3px color-mix(in srgb, var(--bad) 18%, transparent); }
+/* The open tab, when it is red: a red tint, or only a faint grey would tell it from the other red tabs. */
+nav button.danger[aria-selected="true"] { background: color-mix(in srgb, var(--bad) 12%, var(--card)); }
+nav span:empty { display: none; }
+nav .count { margin-left: auto; }
+.danger .count { background: var(--bad); color: #fff; }
+.foot { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 0 6px; }
+.updated { font-size: 12px; color: var(--muted); }
+@media (max-width: 760px) {
+  aside { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+          border-right: none; border-bottom: 1px solid var(--line); }
+  nav { flex-direction: row; flex-wrap: wrap; }
+  nav button { width: auto; }
+  .brand { margin: 0; padding: 0 6px; border-bottom: none; }
+  .foot { margin: 0 0 0 auto; flex-direction: row; align-items: center; }
+}
+
+/* The logo when a newer Sessia exists (panel.js, Logo): a button with a pulsing dot, and its popover, placed like the bucket menu's.
+   Emil Kirilov picked this look on 2026-11-24 from four. Purple (--new, page.css) is nothing else's colour on the page. */
+#update-btn { position: relative; flex: none; display: inline-grid; margin: 0 4px 0 0; padding: 0; border: none; border-radius: 8px; background: none; cursor: pointer; }
+#update-btn svg { margin: 0; }
+#update-btn:focus-visible { outline: 2px solid var(--busy); outline-offset: 2px; }
+.pulse { position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; border-radius: 50%; background: var(--new); box-shadow: 0 0 0 2px var(--card); }
+.pulse::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--new); opacity: 0; animation: logo-pulse 2s ease-out infinite; }
+@keyframes logo-pulse { from { transform: scale(.4); opacity: .8; } to { transform: scale(1.3); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pulse::after { animation: none; } }
+#update-menu { position: fixed; inset: auto; margin: 0; width: 300px; max-width: calc(100vw - 16px); padding: 4px; color: var(--text); background: var(--card);
+               border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18); font-size: 13px; font-weight: 400; letter-spacing: 0; }
+#update-menu section { display: grid; gap: 6px; padding: 8px; }
+#update-menu section + section { border-top: 1px solid var(--line); }
+#update-menu h4 { margin: 0; font-size: 14px; }
+#update-menu p { margin: 0; color: var(--muted); }
+#update-menu ul { margin: 0; display: grid; gap: 3px; }
+#update-menu li { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 0; }
+#update-menu .what { min-width: 0; overflow-wrap: anywhere; }
+#update-menu li code { flex: none; color: var(--muted); }
+#update-menu .cmd { display: block; padding: 4px 6px; font-size: 12px; user-select: all; overflow-wrap: anywhere; }
+#update-menu .row { display: flex; justify-content: flex-end; gap: 6px; }
+#update-menu .said { color: var(--text); }
+#update-menu .said:empty { display: none; }
+#update-menu button.primary { background: var(--new); border-color: var(--new); color: var(--card); font-weight: 600; }
+
+/* The projects folder (root.js): the bucket menu's last line with Change…, the confirmation, and the first-run screen.
+   Emil Kirilov picked the design on 2026-11-24 from four mockups. */
+.brand [hidden], #bucket-btn[hidden] { display: none; }  /* the id's own rule (display: flex) would outrank the first */
+#bucket-menu .root-hint { padding: 2px 0 0 8px; font-size: 11px; color: var(--muted); }
+#bucket-menu .root-line { display: flex; align-items: center; gap: 8px; padding: 2px 0 2px 8px; font-size: 12px; }
+#bucket-menu .root-line .path { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+#bucket-menu .root-line code { font-size: 12px; }
+#bucket-menu #root-change { width: auto; flex: none; padding: 4px 8px; color: var(--busy); font-size: 12px; font-weight: 600; }
+.root-confirm { width: min(380px, calc(100vw - 32px)); padding: 16px; color: var(--text); background: var(--card); border: 1px solid var(--line);
+                border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, .25); font-size: 14px; }
+.root-confirm::backdrop { background: color-mix(in srgb, var(--bg) 55%, transparent); }
+.root-confirm h3 { margin: 0 0 10px; font-size: 15px; overflow-wrap: anywhere; }
+.root-confirm p { margin: 0 0 10px; overflow-wrap: anywhere; }
+.root-confirm .warn { color: var(--waiting-text); }
+.root-confirm .refuse { color: var(--bad); }
+.root-confirm .said:empty { display: none; }
+.root-confirm .row, .first-run .cards { display: flex; gap: 8px; }
+.root-confirm .row { justify-content: flex-end; }
+.root-confirm .row button { padding: 5px 14px; }
+.root-confirm .primary { background: var(--busy); border-color: var(--busy); color: #fff; font-weight: 600; }
+/* The move's confirmation (move.js): wider, for what move-folder.py prints, which scrolls in its own box; what the folder
+   becomes in a blue box, why Sessia wouldn't list it in a red one, and a lone repo's two choices. */
+.move-confirm { width: min(600px, calc(100vw - 32px)); }
+.move-confirm .kind, .move-confirm .note { padding: 8px 10px; border-radius: 8px; font-size: 13px; }
+.move-confirm .kind { background: color-mix(in srgb, var(--busy) 12%, var(--card)); }
+.move-confirm .note { background: color-mix(in srgb, var(--bad) 12%, var(--card)); color: var(--bad); }
+.move-confirm .kinds { display: grid; gap: 8px; margin: 0 0 10px; padding: 0; border: none; }
+.move-confirm .kinds legend { margin-bottom: 6px; padding: 0; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.move-confirm .kinds label { display: flex; align-items: baseline; gap: 8px; overflow-wrap: anywhere; }
+.move-confirm .group { width: 120px; padding: 2px 6px; font: inherit; font-size: 13px; }
+.move-confirm .why { margin-top: -4px; font-size: 12px; color: var(--muted); }
+.move-confirm .out { max-height: 40vh; overflow: auto; margin: 0 0 10px; padding: 8px; border-radius: 6px; background: var(--bg);
+                     font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.first-run { max-width: 640px; margin: 48px auto; padding: 0 16px; }
+.first-run h2 { margin: 0 0 8px; font-size: 20px; text-transform: none; letter-spacing: 0; color: var(--text); }
+.first-run > p { margin: 0 0 16px; color: var(--muted); }  /* its own, not the confirmation's inside it */
+.first-run .cards { flex-wrap: wrap; margin-bottom: 16px; }
+.first-run .cards button { display: grid; gap: 2px; min-width: 150px; max-width: 100%; padding: 10px 12px; border-radius: 8px; text-align: left; overflow-wrap: anywhere; }
+.first-run .cards button:hover { border-color: var(--busy); }
+.first-run .cards small { color: var(--muted); font-size: 12px; }
+/* The move's numbered steps, and the form that starts a git repo for a folder with no git (move.js, RepoForm). */
+.move-confirm .steps { margin: 0 0 10px; padding-left: 26px; list-style: decimal; }
+.move-confirm .steps li, .move-confirm .left li { display: list-item; margin: 3px 0; padding: 0; }  /* the page's li is flex, which has no number */
+.move-confirm .repo { margin: 0 0 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
+.move-confirm .repo legend { padding: 0 4px; font-weight: 600; }
+.move-confirm .repo .fields { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; align-items: center; margin-top: 4px; }
+.move-confirm .repo select, .move-confirm .repo input[type=text] { width: 100%; box-sizing: border-box; padding: 3px 6px; font: inherit; font-size: 13px; }
+.move-confirm .repo .why { margin: 6px 0 0; }
+.move-confirm .repo .note { margin: 8px 0 0; }
+.move-confirm .repo .left { margin: 4px 0 0; padding-left: 20px; font-size: 13px; color: var(--bad); }
+.move-confirm .repo details { margin-top: 6px; font-size: 13px; }
+.move-confirm .repo details .out { margin: 6px 0 0; }
+/* What a move that went well says (move.js, Result): the outcome in one line, the ticked steps, and what is left for the user. */
+.move-confirm .ok-line { display: flex; gap: 8px; margin: 0 0 12px; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, var(--done) 13%, var(--card)); }
+.move-confirm .ok-line .big { color: var(--done); font-weight: 700; }
+.move-confirm .ok-line.bad { background: color-mix(in srgb, var(--bad) 12%, var(--card)); }
+.move-confirm .ok-line.bad .big { color: var(--bad); }
+.move-confirm .checks { margin: 0 0 12px; padding: 0; list-style: none; }
+.move-confirm .checks li { display: flex; gap: 8px; margin: 4px 0; padding: 0; }
+.move-confirm .checks li::before { content: "✓"; flex: none; color: var(--done); font-weight: 700; }
+.move-confirm .checks li.failed::before { content: "✗"; color: var(--bad); }
+.move-confirm .checks li.failed { color: var(--bad); }
+.move-confirm .checks .out { margin: 4px 0 0; color: var(--text); }
+.move-confirm .left-box { margin: 0 0 12px; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, var(--waiting) 14%, var(--card)); }
+.move-confirm .left-box h4 { margin: 0 0 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--waiting-text); }
+.move-confirm .left-box ul { margin: 0; padding-left: 18px; list-style: disc; }
+.move-confirm .left-box li { display: list-item; margin: 3px 0; padding: 0; }
+.move-confirm details { margin: 0 0 12px; font-size: 13px; }
+.move-confirm details summary { cursor: pointer; color: var(--muted); }
+.move-confirm details .out { margin: 6px 0 0; }
+/* The screen before Move (move.js, FromTo, Changes, Still): From → To, what changes in groups, what still names the old path, and the
+   warning joined to the buttons in a red band at the foot (design B, Emil Kirilov, 2026-11-27). */
+.move-confirm .fromto { display: flex; gap: 8px; align-items: stretch; margin: 0 0 10px; }
+.move-confirm .fromto > div { flex: 1; min-width: 0; padding: 8px 10px; border-radius: 8px; background: var(--bg); overflow-wrap: anywhere; }
+.move-confirm .fromto .to { background: color-mix(in srgb, var(--busy) 12%, var(--card)); }
+/* The path sits on the box's own colour: the page's grey chip for `code` looked like a broken patch on the blue box. */
+.move-confirm .fromto code { background: none; padding: 0; }
+.move-confirm .fromto .arrow { align-self: center; color: var(--muted); font-size: 18px; }
+.move-confirm h4 { margin: 0 0 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.move-confirm .left-box h4 { color: var(--waiting-text); }
+.move-confirm .changes { margin: 0 0 10px; }
+.move-confirm .grp { display: flex; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); }
+.move-confirm .grp b { flex: none; width: 112px; }
+.move-confirm .grp .one { display: block; }
+.move-confirm .left-box p { margin: 0 0 4px; }
+.move-confirm .todo-start { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 4px; }
+.move-confirm .todo-start .why { margin: 0; }
+.move-confirm .todo-start button { padding: 2px 10px; }
+.move-confirm .left-box .muted { color: var(--muted); }
+.move-confirm .undo-foot { display: flex; gap: 12px; align-items: center; margin: 12px -16px -16px; padding: 12px 16px; border-radius: 0 0 11px 11px;
+                      background: color-mix(in srgb, var(--bad) 10%, var(--card)); border-top: 1px solid color-mix(in srgb, var(--bad) 25%, var(--line)); }
+.move-confirm .undo-foot .undo { flex: 1; margin: 0; font-size: 12.5px; color: var(--bad); }

@@ -1,0 +1,36 @@
+/* An item is a grid: circle | title | ▶️ in the second row, and the assignee's line above the title in the
+   first (a row with nothing in it has no height). The card itself is the page's .session. */
+li.entry { padding: 4px 0; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0 6px; align-items: baseline; }
+li.entry > .prio { grid-area: 2 / 1; }
+li.entry > :is(details, span) { grid-area: 2 / 2; }
+li.entry > .start { grid-area: 2 / 3; }
+li.entry + li.entry { border-top: 1px solid var(--line); }
+li.entry details { margin: 0; }
+li.entry > :is(details, span) { min-width: 0; }
+li.entry summary { color: inherit; font-size: inherit; }
+li.entry .prio { flex: none; appearance: none; border: none; background: none; padding: 0;
+                 font: inherit; color: inherit; cursor: pointer; }
+
+/* The assignee of an item's GitHub issue, on a line of its own above the title. It is a link, so it has
+   the page's link blue (--busy: 4.7:1 on the card in light mode, 6.1:1 in dark), underlined on hover. */
+li.entry > .owner { grid-area: 1 / 2; font-size: 12px; line-height: 1.3; color: var(--busy); text-decoration: none; }
+li.entry > .owner:hover { text-decoration: underline; }
+/* The running sessions that started from a TODO item, under its title: ▶️ asks before it starts another. */
+li.entry > .runs { grid-area: 3 / 2; margin: 2px 0 0; font-size: 12px; color: var(--busy); }
+li.entry > .runs > span { display: block; }
+li.entry > .runs button { margin-left: 4px; }
+/* The item a ?issue= link opened. To catch the eye, its background flashes when the page shows it and
+   fades out by itself (no pointer needed), so the muted text on it is back to its usual contrast after
+   3 s (FLASH_MS in notes.js). A bar at its left edge stays as the lasting marker. A redraw keeps the
+   item's element, so the flash carries on by itself. */
+li.entry.focus { margin-left: -6px; padding-left: 6px; box-shadow: inset 3px 0 0 var(--waiting); }
+li.entry.flash { animation: flash 3s ease-out both; }
+@keyframes flash { 0%, 20% { background: color-mix(in srgb, var(--waiting) 30%, transparent); } 100% { background: transparent; } }
+
+.compact li.entry { padding-block: 1px; }
+.compact li.entry > span, .compact li.entry details:not([open]) summary {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* The assignee's line would cost a row for every item: it shows only for an item that is open or lit,
+   and a closed one has it in the tooltip of its title. */
+.compact li.entry > .owner { display: none; }
+.compact li.entry:is(.focus, :has(details[open])) > .owner { display: block; }

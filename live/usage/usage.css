@@ -1,0 +1,68 @@
+/* The Usage tab (usage.js): cards of meters, the month's days as bars, the tables and the plan strip. The meters, tables and model colours
+   are the token card's (sessions/usage.css, loaded with core.js), so this file adds only what the tab itself draws. A meter's --p is how
+   full its limit is (0 to 100), a day's --h its height against the month's highest. Everything is under .usage-tab, the tab's root, so the gallery (which has no #usage) styles it too. */
+.usage-tab h3 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+.usage-tab button, .usage-tab select { font-size: 12px; }
+.usage-tab select { font: inherit; font-size: 12px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); }
+.usage-tab .x-card { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); min-width: 0; }
+.usage-tab .x-muted { color: var(--muted); }
+.usage-tab .x-note { margin: 10px 0 0; font-size: 11px; color: var(--muted); }
+.usage-tab .x-gap { height: 10px; }
+.usage-tab .x-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.usage-tab .x-row .grow { flex: 1; }
+.usage-tab .x-cards { margin-top: 18px; }
+.usage-tab .x-cards h3 { margin: 0; }
+.usage-tab .dot { display: inline-block; width: 8px; height: 8px; margin-right: 0; border-radius: 50%; }
+.usage-tab button:focus-visible, .usage-tab select:focus-visible { outline: 2px solid var(--busy); outline-offset: 2px; }
+
+/* the plan strip: the plan's own percentages, as Claude Code last saw them (not tokens), dashed so it isn't taken for a token count */
+.usage-tab .x-plan { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin: 0 0 12px; padding: 7px 12px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: 12px; }
+.usage-tab .x-plan b { color: var(--text); font-variant-numeric: tabular-nums; }
+.usage-tab .x-plan .pbar { display: inline-block; width: 64px; height: 5px; margin: 0 6px; vertical-align: 1px; border-radius: 3px; background: linear-gradient(90deg, var(--busy) calc(var(--p) * 1%), var(--line) 0); }
+.usage-tab .x-plan .age { margin-left: auto; }
+
+/* a small meter in a list of projects */
+.usage-tab .x-mini { display: block; width: 100%; height: 4px; --c: var(--busy);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c) 45%, transparent), var(--c)) 0 0 / calc(var(--p) * 1%) 100% no-repeat, var(--line); border-radius: 2px; }
+.usage-tab .x-mini.near { --c: var(--waiting); }
+.usage-tab .x-mini.over { --c: var(--bad); }
+.usage-tab .u-meter .u-of { font-size: 12px; }
+
+/* the month's days */
+.usage-tab .x-days { position: relative; display: flex; align-items: flex-end; gap: 3px; height: var(--ht, 120px); margin: 6px 0 4px; }
+.usage-tab .x-days i { flex: 1; height: max(2px, calc(var(--h) * 100%)); border-radius: 2px 2px 0 0; background: color-mix(in srgb, var(--busy) 40%, transparent); }
+.usage-tab .x-days i.now { background: var(--busy); }
+.usage-tab .x-days i.near { background: var(--waiting); }
+.usage-tab .x-days i.over { background: var(--bad); }
+.usage-tab .x-days .u-line { z-index: 1; }
+.usage-tab .x-axis { display: flex; gap: 3px; color: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; }
+.usage-tab .x-axis span { flex: 1; min-height: 12px; text-align: center; }
+.usage-tab .x-spark { display: flex; align-items: flex-end; gap: 1px; height: 26px; margin: 8px 0 4px; }
+.usage-tab .x-spark i { flex: 1; height: max(1px, calc(var(--h) * 100%)); border-radius: 1px 1px 0 0; background: color-mix(in srgb, var(--k, var(--busy)) 50%, transparent); }
+.usage-tab .x-spark i.now { background: var(--k, var(--busy)); }
+.usage-tab .u-stats { margin-top: 6px; font-size: 12px; }
+.usage-tab .u-split { font-size: 12px; }
+.usage-tab .u-limits { margin: 0 0 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.usage-tab .x-limits label { max-width: 180px; }
+
+/* the levels: the breadcrumb, the whole account's line, the three meters, the days and the tables, the cards */
+.usage-tab .b-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-bottom: 12px; font-size: 13px; }
+.usage-tab .b-crumbs button { border: none; background: none; padding: 2px 4px; color: var(--busy); font-size: 13px; }
+.usage-tab .b-crumbs button:hover { text-decoration: underline; }
+.usage-tab .b-crumbs .here { font-weight: 700; }
+.usage-tab .b-acct { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-bottom: 12px; padding: 6px 12px; border-radius: 8px; background: color-mix(in srgb, var(--text) 5%, transparent); font-size: 12px; color: var(--muted); }
+.usage-tab .b-acct b { color: var(--text); }
+.usage-tab .b-now { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 14px; }
+.usage-tab .b-detail { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+.usage-tab .b-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; margin-top: 14px; }
+.usage-tab .b-cardhead { all: unset; display: flex; align-items: center; gap: 8px; width: 100%; cursor: pointer; }
+.usage-tab .b-cardhead:focus-visible { outline: 2px solid var(--busy); outline-offset: 2px; }
+.usage-tab .b-cardhead:hover .nm { text-decoration: underline; }
+.usage-tab .b-cardhead .nm { font-size: 15px; font-weight: 700; }
+.usage-tab .b-cardhead .mo { margin-left: auto; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.usage-tab .b-card .u-meters { margin: 10px 0 4px; }
+.usage-tab .b-plist { display: grid; gap: 2px; margin: 8px 0 0; padding: 8px 0 0; border-top: 1px solid var(--line); }
+.usage-tab .b-plist button { all: unset; display: grid; grid-template-columns: 1fr auto 70px; align-items: center; gap: 10px; padding: 3px 4px; border-radius: 6px; cursor: pointer; font-size: 12px; font-variant-numeric: tabular-nums; }
+.usage-tab .b-plist button:hover { background: var(--bg); }
+.usage-tab .b-plist button:focus-visible { outline: 2px solid var(--busy); outline-offset: 1px; }
+.usage-tab .b-plist .more { display: block; color: var(--muted); font-size: 11px; }

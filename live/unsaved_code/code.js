@@ -5,7 +5,7 @@ import { ago, byProject, css, empty, hit, html, narrowIn, plural } from '../core
 
 css(import.meta.url, 'code.css');
 
-// What the ⬇️ and 📝 tags mean. dashboard.html has its own copy for the same marks in the menu, until the left panel moves.
+// What the ⬇️ and 📝 tags mean, here and in the tooltip of the tab's red button in the menu (sessia/panel/panel.js).
 export const BEHIND = 'A main folder is behind GitHub: something was merged on GitHub that this computer doesn’t have yet. '
   + 'Update the folder: in it, run git merge --ff-only origin/<its main branch>.';
 export const UNCOMMITTED = 'A main folder has uncommitted changes. First check whose they are: a session or a person may be '

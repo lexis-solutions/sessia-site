@@ -1,0 +1,52 @@
+/* The Productivity tab's styles, loaded by productivity.js. */
+/* The tiles, then the heat map in the room right of them; it moves under them on a narrow screen.
+   Every card in a row is as tall as the tallest one. */
+.tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.tile, .heat { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+.tile { flex: 1 0 170px; max-width: 230px; }
+.heat { flex: none; width: min-content; max-width: 100%; overflow-x: auto; }
+.heat-grid { display: grid; grid-template-rows: 14px; grid-auto-rows: 11px; grid-auto-columns: 11px; gap: 3px;
+             font-size: 10px; line-height: 11px; color: var(--muted); }
+.heat-grid > span { white-space: nowrap; }
+.heat-grid > [data-day] { border-radius: 2px; }
+.heat .note { text-align: center; }
+.heat .key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin: 0 1px; }
+.h0 { background: var(--line); }
+.h1 { background: color-mix(in srgb, var(--busy) 30%, var(--card)); }
+.h2 { background: color-mix(in srgb, var(--busy) 55%, var(--card)); }
+.h3 { background: color-mix(in srgb, var(--busy) 80%, var(--card)); }
+.h4 { background: var(--busy); }
+.heat-grid > [data-day]:is(:hover, :focus-visible) { outline: 1px solid var(--text); outline-offset: 0; }
+/* A day's details in the tooltip. */
+#tip.rich { width: 27em; padding: 8px 10px; }
+#tip.rich h3 { margin: 7px 0 2px; font-size: 12px; font-weight: 600; }
+#tip.rich .dim { opacity: .7; }
+#tip.rich ul { list-style: disc; margin: 0; padding-left: 1.4em; }
+#tip.rich li { display: list-item; padding: 0; }
+/* The day's hours as one bar, like the "day by day" bars, with each part's hours inside it. */
+#tip.rich .hours { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center; }
+#tip.rich .bar { height: 16px; font-size: 11px; line-height: 16px; font-weight: 600; color: #111; }
+#tip.rich .bar span { flex: 1 1 0; padding: 0 3px; text-align: center; white-space: nowrap; }
+#tip.rich .bar .other { color: light-dark(#111, #fff); }  /* #111 is too faint on the dark grey */
+/* Time with 1, 2, 3… Claude sessions running, in a day's card and under the "day by day" bars. */
+.lv { display: grid; grid-template-columns: 6.5em 1fr 6em; gap: 6px; align-items: center; }
+.lv i { display: block; height: 7px; border-radius: 2px; background: currentColor; opacity: .75; }
+.lv span:last-child { text-align: right; }
+.at-once { font-size: 12px; font-variant-numeric: tabular-nums; }
+.at-once h3 { margin: 10px 0 2px; font-size: 12px; font-weight: 600; }
+.tile b { display: block; font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.table { overflow-x: auto; margin-bottom: 16px; }
+table { border-collapse: collapse; width: 100%; background: var(--card); border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+th, td { padding: 4px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 12px; font-weight: 600; color: var(--muted); }
+th:first-child, td:first-child { text-align: left; }
+.day { display: grid; grid-template-columns: 56px 1fr 36px; gap: 8px; align-items: center; font-size: 12px; font-variant-numeric: tabular-nums; }
+.day.none { color: var(--muted); }
+.day span:last-child { text-align: right; }
+.bar { display: flex; height: 10px; border-radius: 3px; overflow: hidden; }
+.talk { background: var(--waiting); } .sessions { background: var(--busy); } .other { background: var(--idle); }
+.detail td { white-space: normal; background: var(--bg); }
+.breakdown { max-width: 760px; padding: 4px 0 8px; }
+.breakdown h2 { margin-top: 12px; }
+.breakdown .tag { align-self: flex-start; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px 0 10px; vertical-align: -1px; }

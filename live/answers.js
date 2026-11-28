@@ -8,6 +8,9 @@
     '/priority': "In your own copy this changes the item's priority in its file on GitHub.",
     '/worktree-delete': 'In your own copy this deletes the folder, after its checks.',
     '/productivity': 'In your own copy this counts the hours again.',
+    '/awake': 'In your own copy this keeps your Mac awake while a session works.',
+    '/new-session': 'In your own copy this starts a Claude session in the repo.',
+    '/pull': 'In your own copy this updates Sessia from GitHub.',
     notify: 'In your own copy this turns on notifications, with a sound, when a session needs you.',
   };
   const recorded = fetch('data.json').then(r => r.text()).then(text => {
@@ -39,6 +42,9 @@
   window.fetch = async (url, init) => {
     const path = new URL(url, location.href).pathname.replace(/.*(?=\/[^/]+$)/, '');
     if (path === '/data') return new Response(await recorded, { headers: { 'Content-Type': 'application/json' } });
+    if (path === '/whats-new') return new Response(JSON.stringify({ loaded: [], github: [] }), { headers: { 'Content-Type': 'application/json' } });
+    // Choosing, checking and moving a folder into Sessia's folder: one note for all of them.
+    if (/^\/(choose-folder|root-\w+|move(-\w+)?|repo-accounts)$/.test(path)) NOTES[path] = 'In your own copy this picks the folder your projects live in, and moves other folders into it.';
     if (NOTES[path]) {
       tell(NOTES[path]);
       return new Response(JSON.stringify(NOTES[path]), { status: 409 });
@@ -67,11 +73,14 @@
       setItem: (k, v) => shared(k) ? stored.setItem(k, v) : mine.set(k, String(v)),
       removeItem: k => shared(k) ? stored.removeItem(k) : mine.delete(k),
     } });
-    if (query.has('menu')) addEventListener('sessia:render', () => {
+    // The page draws its menu once /data has come and sends no event for it, so look for the menu's rows.
+    if (query.has('menu')) new MutationObserver((_, watching) => {
       const menu = document.getElementById('bucket-menu');
+      if (!menu?.querySelector('[aria-checked]')) return;
+      watching.disconnect();
       menu.showPopover();
       document.activeElement.blur();  // the page focuses the menu's ticked row; a picture must not take the focus
-    }, { once: true });
+    }).observe(document.documentElement, { childList: true, subtree: true });
   } else try {
     if (!stored.getItem('buckets')) for (const [k, v] of Object.entries(FIRST)) stored.setItem(k, v);
   } catch {}

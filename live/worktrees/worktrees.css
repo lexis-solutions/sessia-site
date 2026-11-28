@@ -1,0 +1,6 @@
+/* The columns' headings carry a count, a size and a button, so they wrap; a card's own styles are the page's .session. */
+.columns > section > h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+h2 .count { margin-left: 0; }
+h2 .size { text-transform: none; letter-spacing: 0; }
+.wt .why { color: var(--waiting); }
+.wt a { overflow-wrap: anywhere; }

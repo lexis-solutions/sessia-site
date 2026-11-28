@@ -129,7 +129,9 @@ function draw() {
 for (const frame of document.querySelectorAll('.window iframe')) frame.addEventListener('load', () => apply(root.dataset.theme));
 live.addEventListener('load', () => {
   const win = live.contentWindow;
-  win.addEventListener('sessia:render', () => requestAnimationFrame(draw));
+  // Sessia's page sends no event when it has drawn (it did until 2026-11-23): redraw when its markup changes.
+  let queued = false;
+  new MutationObserver(() => queued || (queued = requestAnimationFrame(() => (queued = false, draw())))).observe(live.contentDocument.body, { childList: true, subtree: true });
   win.addEventListener('scroll', draw, { passive: true });
   win.addEventListener('click', () => setTimeout(draw, 50));
   draw();

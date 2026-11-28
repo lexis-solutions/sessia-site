@@ -1,0 +1,117 @@
+/* The styles of the Claude sessions and Closed sessions tabs (sessions.js): the card, its ring and bar, the gold glow, the
+   counts line, and the compact view of the card. The shared ones (.session, .pin, .info, .top, .title, .note) are in page.css. */
+.sumrow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0 0 12px; }
+.sumrow .summary, .sumrow .crash { margin: 0; }
+.sumrow .crash { margin-left: auto; }
+.state { font-size: 12px; white-space: nowrap; color: var(--muted); }
+.ctx { font-size: 12px; white-space: nowrap; color: var(--muted); }
+.ctx.warn { color: var(--waiting-text); font-weight: 600; }
+.ctx.bad { color: var(--bad); font-weight: 600; }
+@keyframes pulse { 50% { opacity: .25; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* A Claude session's card (sessionCard()). Emil Kirilov put it together on 2026-11-19 from three of the four
+   designs drawn for it. The layout is "Stream": a ring for the state, the title, under it the one line worth
+   reading, the state and the numbers on the right. The progress bar is "Rail"'s. The colours, borders and
+   spacing are "Focus": a session that needs you is amber, one at work is a plain card, an idle or a finished
+   one has no background on the dark theme and is white on the light one. --st is the state's colour. */
+.scard { --st: var(--idle); position: relative; overflow: hidden; display: grid; grid-template-columns: 24px minmax(0, 1fr) auto;
+         gap: 0 10px; align-items: start; border-left: 1px solid var(--line); border-radius: 12px; padding: 11px 14px 12px;
+         margin-bottom: 10px; box-shadow: 0 1px 2px light-dark(rgba(0, 0, 0, .05), rgba(0, 0, 0, .35)); }
+.scard.busy { --st: var(--busy); } .scard.needs { --st: var(--waiting); } .scard.done { --st: var(--done); } .scard.closed { --st: var(--bad); }
+.scard.needs { background: color-mix(in srgb, var(--waiting) 9%, var(--card)); border-color: color-mix(in srgb, var(--waiting) 50%, var(--line));
+               box-shadow: none; }  /* no outer amber ring (2026-11-22): the gold ring of a new ping, .glow below, is then the only one and shows */
+.scard:is(.done, .idle) { background: light-dark(var(--card), transparent); box-shadow: none; }  /* white on light: the page's grey under the text was hard to read (2026-11-19) */
+.scard.closed { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); box-shadow: 0 2px 10px color-mix(in srgb, var(--bad) 16%, transparent); }
+.ring { align-self: start; margin-top: 2px; }
+.ring svg { display: block; width: 24px; height: 24px; }
+.ring .spin { transform-origin: 12px 12px; animation: spin 1.1s linear infinite; }
+.ring .beat { animation: pulse 1.2s ease-in-out infinite; }
+.ring .blink { animation: blink 1.1s step-end infinite; }  /* an idle session's text cursor: your turn to type */
+@keyframes blink { 50% { opacity: 0; } }
+/* !important: .ring .spin and the others are more specific than .ring *, so without it nothing stopped (2026-11-21). */
+@media (prefers-reduced-motion: reduce) { .ring * { animation: none !important; } }
+.scard .top { gap: 0; }
+.scard .title { flex: 0 1 auto; }
+.sub { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.needs .sub { color: var(--waiting-text); font-weight: 500; }
+.closed .sub { color: var(--bad); font-weight: 600; }
+.side { display: grid; justify-items: end; font-size: 12px; line-height: 1.4; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scard .state { font-weight: 600; color: var(--st); }
+.scard.needs .state { color: var(--waiting-text); }
+.scard.idle .state { color: var(--muted); }
+/* The right side is one column (state and time, steps and size, then Open and Dismiss), so the title keeps the width
+   the buttons took from its row. The compact view keeps it in a row: it has two rows to spend, not three. */
+.right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.acts { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.task { display: flex; gap: 6px; min-width: 0; }  /* the same hanging icon as a list item below the card */
+.emoji { flex: none; }
+/* How far a session says it is: the browser's own element, so a program that reads the page aloud gets the
+   two numbers; each engine names the bar's parts its own way. */
+.scard progress { grid-column: 1 / -1; display: block; width: 100%; height: 4px; margin-top: 9px; border: none; border-radius: 2px;
+                  overflow: hidden; appearance: none; background: var(--line); color: var(--st); }
+progress::-webkit-progress-bar { background: var(--line); }
+progress::-webkit-progress-value { background: currentColor; border-radius: 2px; }
+progress::-moz-progress-bar { background: currentColor; border-radius: 2px; }
+/* While the session works, a white shine sweeps along the filled part, slow at first and fast at the end,
+   and the tip sparks as it arrives: "Shine and spark", which Emil Kirilov picked on 2026-11-20 from five.
+   Two layers over the bar's colour: the spark, a white fade pinned to the right end whose width grows and
+   shrinks, and the shine, a band moved from off the left end to off the right, then resting off screen.
+   A redraw replaces the bar, so --shine (sessionCard()) starts it where the clock says: it carries on, not over. */
+.scard.busy progress::-webkit-progress-value {
+  background: linear-gradient(90deg, transparent, #fff) right / 0 100% no-repeat,
+              linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent) -60% 0 / 35% 100% no-repeat, currentColor;
+  animation: spark 2.2s var(--shine, 0s) infinite; }
+.scard.busy progress::-moz-progress-bar {
+  background: linear-gradient(90deg, transparent, #fff) right / 0 100% no-repeat,
+              linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent) -60% 0 / 35% 100% no-repeat, currentColor;
+  animation: spark 2.2s var(--shine, 0s) infinite; }
+@keyframes spark {
+  0% { background-position: right, -60% 0; background-size: 0 100%, 35% 100%; animation-timing-function: cubic-bezier(.55, 0, .9, .5); }
+  55% { background-position: right, 150% 0; background-size: 0 100%, 35% 100%; }
+  60% { background-size: 22px 100%, 35% 100%; }
+  85%, 100% { background-position: right, 150% 0; background-size: 0 100%, 35% 100%; } }
+@media (prefers-reduced-motion: reduce) {  /* one rule per engine: each drops a rule that names the other's part */
+  .scard.busy progress::-webkit-progress-value { animation: none; }
+  .scard.busy progress::-moz-progress-bar { animation: none; } }
+.scard > ul { grid-column: 2 / -1; margin: 7px 0 2px; font-size: 13px; }
+.scard li.fin { color: var(--muted); }
+.scard > .note { grid-column: 2 / -1; margin-top: 4px; }
+/* A session whose notification needs you: its border and its project's name turn gold, pulse three
+   times, and fade back to their own colour (no 100% frame: the animation ends on the normal value).
+   As long as GLOW_MS; a redraw resumes it with a negative animation-delay, see glowing(). */
+:root { --gold-text: light-dark(#b8860b, gold); }  /* plain gold is unreadable as text on the light theme */
+.scard.glow { animation: glow-card 8s ease-in-out both; }
+h2.glow { animation: glow-text 8s ease-in-out both; }
+@keyframes glow-card { 0%, 15%, 30%, 45%, 60% { border-color: gold; box-shadow: 0 0 0 3px color-mix(in srgb, gold 45%, transparent); }
+  7.5%, 22.5%, 37.5% { border-color: color-mix(in srgb, gold 30%, var(--card)); box-shadow: 0 0 0 3px color-mix(in srgb, gold 12%, transparent); } }
+@keyframes glow-text { 0%, 15%, 30%, 45%, 60% { color: var(--gold-text); }
+  7.5%, 22.5%, 37.5% { color: color-mix(in srgb, var(--gold-text) 30%, var(--muted)); } }
+h2 .open-all { margin: -4px 0 -4px 8px; }  /* the negative margins keep the row as tall as the other columns' */
+/* .grid scrolls sideways, which clips upward too: without room above the title row, Open all lost its top border.
+   Every project's row gets it, so the columns stay level. */
+#closed h2 { margin-top: 4px; }
+.compact .scard { padding: 7px 11px 8px; margin-bottom: 6px; }
+.compact .scard.open { padding-bottom: 12px; }
+.compact .ring { align-self: center; margin: 0; }
+.compact .scard { align-items: center; }
+.compact .right { flex-direction: row; align-items: center; gap: 10px; }
+.compact .acts { flex-direction: row; }
+.compact .scard:not(.open) .sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.compact .scard:not(.open) .task > :last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }  /* a flex line's ellipsis belongs to its text */
+.compact .scard:not(.open) > :is(ul, .note) { display: none; }
+.compact .scard progress { position: absolute; grid-column: auto; inset: auto 0 0 0; height: 3px; margin: 0; border-radius: 0; }  /* no grid-column, or the bar stops at the padding */
+.compact .scard .title { font-weight: 600; }
+
+/* The list of projects with no running session, after the last column of the Claude sessions tab (idleList()). A column is two of the
+   grid's narrow tracks (162 to 232 px each, so 340 to 480 px with the gap, as on every other tab), and the list is the one track left. */
+.grid:has(> .idle-list) { grid-auto-columns: minmax(162px, 232px); }
+.grid:has(> .idle-list) > section { grid-column: span 2; }
+/* At least 190 px, and as wide as its columns (one per bucket) and full names need: as the grid's last item it may run past its track,
+   and the row scrolls on to show it (Emil Kirilov, 2026-11-26: the names were cut so short that no row could be told apart). */
+.idle-list { box-sizing: border-box; display: flex; gap: 16px; width: max-content; min-width: 207px; padding-left: 16px; border-left: 1px solid var(--line); }
+.idle-col { flex: 1 0 auto; }
+.idle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; padding: 6px 8px 6px 10px;
+            background: light-dark(var(--card), transparent); border: 1px solid var(--line); border-radius: 8px; }
+.idle-row .pname { white-space: nowrap; }
+.idle-row button { flex: none; }
