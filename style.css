@@ -8,7 +8,7 @@
   color-scheme: light;
   --bg: #ffffff; --text: #1d1d1b; --muted: #77756f; --line: #e3e1dc; --raise: #f6f6f4;
   --pill: #1d1d1b; --pill-text: #ecebe7; --before: #c4c1b9;
-  --gutter: 48px; --wide: 1344px; --column: 680px;
+  --gutter: 48px; --wide: 1344px; --column: 680px; --gap: 120px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -75,6 +75,8 @@ h1 {
 }
 .under { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; margin-top: 32px; }
 .lede { max-width: 640px; margin: 0; font-size: 20px; line-height: 1.55; }
+.lede p { margin: 0 0 8px; }
+.lede ul { margin: 0; padding-left: 22px; }
 .act { flex: 0 1 auto; padding-top: 4px; }
 .buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
 .pill {
@@ -116,7 +118,16 @@ h1 {
 .opening { max-width: var(--column); margin: 128px auto 0; }
 .opening p { margin: 0; font-size: 24px; line-height: 1.5; letter-spacing: -.01em; }
 .opening .practical { margin-top: 24px; font-size: 18px; letter-spacing: 0; }
-.part { max-width: var(--column); margin: 144px auto 0; }
+/* The six steps at a glance, as wide as the shots. Each card holds what its step takes off you, and is a link to it. */
+.day { list-style: none; margin: 56px calc((var(--column) - 1000px) / 2) 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.day li { position: relative; padding: 16px 18px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--raise); font-size: 15.5px; line-height: 1.5; }
+.day li:hover { border-color: var(--muted); }
+.day a { display: block; margin-bottom: 8px; text-decoration: none; }
+.day a::after { content: ""; position: absolute; inset: 0; border-radius: 12px; }
+.part { max-width: var(--column); margin: var(--gap) auto 0; }
+/* Steps 3 and 4 side by side, as wide as the shots. */
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; max-width: 1000px; margin: var(--gap) auto 0; }
+.pair .part { margin: 0; }
 .label { margin: 0 0 14px; font-size: 13px; color: var(--muted); letter-spacing: .02em; }
 h2 { margin: 0 0 14px; font-size: 36px; line-height: 1.15; font-weight: 620; letter-spacing: -.025em; text-wrap: balance; }
 h3 { margin: 40px 0 10px; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
@@ -162,15 +173,10 @@ pre code { font-size: inherit; }
 .answer:has([data-k="4"]:hover) [data-k="4"], .answer:has([data-k="5"]:hover) [data-k="5"], .answer:has([data-k="6"]:hover) [data-k="6"],
 .answer:has([data-k="7"]:hover) [data-k="7"] { opacity: 1; color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
 .answer [data-k]:hover > .n { border-color: var(--text); color: var(--text); }
-/* A section's points at a glance: under its text (section 3), or beside it on a wide screen and above it on a narrower one (section 5). */
-.glance { margin: 24px 0; }
-.glance li { margin-bottom: 8px; }
-/* The list sits in the right margin as a grid column, so the live copy below starts under the longer of the two. */
-@media (min-width: 1400px) {  /* where the margin beside the column is wide enough */
-  .beside { display: grid; grid-template-columns: var(--column) 260px; grid-template-rows: auto 1fr; column-gap: 48px; margin-right: -308px; align-items: start; }
-  .beside > .glance { grid-column: 2; grid-row: 1 / span 2; margin: 4px 0 0; }
-  .beside > p { grid-column: 1; }
-}
+/* A section's points, as a list: each starts with a few bold words, so the bold alone can be read down the page. */
+.glance { margin: 20px 0 24px; font-size: 16.5px; color: var(--text); }
+.glance b { font-weight: 620; }
+.glance li { margin-bottom: 10px; }
 .steps { margin: 8px 0 20px; }
 
 /* Section 2: the same answer without the structure, above the example with it, as wide as the example. */
@@ -190,6 +196,12 @@ pre code { font-size: inherit; }
 .faq summary::after { content: "+"; font-family: "Geist Mono", ui-monospace, monospace; color: var(--muted); }
 .faq details[open] summary::after { content: "−"; }
 .faq details p { margin: 0 0 16px; color: var(--muted); }
+/* Detail that most visitors skip, folded like a question of the FAQ: the honest list, the compaction cards, the undo list. */
+.fold { margin-top: 28px; }
+.fold .honest, .fold .cards { margin-bottom: 20px; }
+.fold dt:first-child { margin-top: 0; }
+.fold .now p { color: inherit; }  /* the hand-over card keeps its text colour inside a fold */
+.answer + .aside { margin-top: 20px; }
 .undo dd { overflow-wrap: anywhere; }
 .undo pre { margin-top: 8px; color: var(--text); }
 
@@ -240,7 +252,10 @@ pre code { font-size: inherit; }
 
 /* Narrower screens: the shots and the example fit the column; the notes go above the live copy, without lines. */
 @media (max-width: 1100px) {
-  .shot, .answer, .before, .part .with, .stats { margin-left: 0; margin-right: 0; }
+  .shot, .answer, .before, .part .with, .stats, .day { margin-left: 0; margin-right: 0; }
+  .day { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pair { display: block; max-width: none; margin: 0; }
+  .pair .part { margin: var(--gap) auto 0; }
   .answer { grid-template-columns: 1fr; }
 }
 @media (max-width: 1000px) {
@@ -253,7 +268,7 @@ pre code { font-size: inherit; }
   .caption { margin-left: 0; }
 }
 @media (max-width: 640px) {
-  :root { --gutter: 16px; }
+  :root { --gutter: 16px; --gap: 96px; }
   body { font-size: 16px; }
   .bar nav { gap: 16px; }
   .bar nav a[href="#how"] { display: none; }
@@ -263,12 +278,11 @@ pre code { font-size: inherit; }
   .notes { grid-template-columns: 1fr; }
   .opening { margin-top: 88px; }
   .opening p { font-size: 20px; }
-  .part { margin-top: 104px; }
   h2 { font-size: 28px; }
   .off { font-size: 18px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .stats li { padding: 14px 14px 16px; }
   .stats b { font-size: 30px; }
   .bars { --value: 108px; }
-  .charts.two, .cards { grid-template-columns: 1fr; }
+  .charts.two, .cards, .day { grid-template-columns: 1fr; }
 }
